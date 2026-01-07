@@ -1,0 +1,8 @@
+target/
+*.log
+.vscode/
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db
