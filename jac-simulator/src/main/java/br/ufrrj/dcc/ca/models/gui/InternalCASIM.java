@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.gui;
+package br.ufrrj.dcc.ca.models.gui;
 
 
 import java.awt.BorderLayout;
@@ -48,35 +48,20 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.NumberFormatter;
+import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
 
-//import org.python.modules.synchronize;
-
-
-
-import br.ufrrj.dcc.ca.models.*;
-import br.ufrrj.dcc.ca.models.gui.GUICA;
-import br.ufrrj.dcc.ca.models.logic.GameOfLife;
 import br.ufrrj.dcc.ca.models.logic.SimpleCA2DModel;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-
-
-public class SimuWindow extends JInternalFrame{
-	private static final int ITENS  			= 4;
+public class InternalCASIM extends JInternalFrame{
+    private static final int ITENS  			= 4;
 	private static final int NEXT_STEP 			= 0;
 	private static final int RUN_CA       		= 1;
 	private static final int MODEL_CA_BG	    = 2;
 	private static final int INIT_CA     	    = 3;
-	private SimuWindow mPtr = null;
-	/*
-	private JButton mNext = null;
-	private JButton mPrevious = null;
-	private JButton mSaveSnapshot = null;
-	*/
-	private int []mMenuHash;
+    
+    private InternalCASIM mPtr = null;
+    private int []mMenuHash;
     private JMenuBar mMenuBar = null;
     private JMenuItem mMenuItem = null;
     private JMenu     mMenu     = null;
@@ -92,62 +77,16 @@ public class SimuWindow extends JInternalFrame{
     private BGThread mThreadBG = null;
     private FGThread mThreadFG = null;
     private JDesktopPane mPainel =  null;
-    
-    private void closeFrameEvent() {
-    	 addInternalFrameListener(new InternalFrameAdapter(){
-             public void internalFrameClosing(InternalFrameEvent e) {
-            	 mPtr.dispose();
-            	 //mPainel.remove(mPtr);
-             }
-         });
-    }
 
-    
-
-    public SimuWindow(String modelname, JDesktopPane p) {
-    	super(modelname, true, true, true, false);
-    	this.mPainel = p;
-		mPtr = this;
-		closeFrameEvent();
-        createMenu();
-    	//Settings s = new Settings(modelname);
-    	
-    	//AQUI
-    }
-    
-    public SimuWindow(int type, int w, int h, String boundary, JDesktopPane p) {
-		super("Cellular Automata Simulation", true, true, true, false);
-		this.mPainel = p;
-		mPtr = this;
-		closeFrameEvent();
+    public InternalCASIM (SimpleCA2DModel ca, int w, int h, JDesktopPane p){
+        this.mCA = ca;
+        this.mPainel = p;
+		this.mPtr = this;
         createMenu(); 
-        //Adding GUI JPanels
-        this.getContentPane().add(createLayer(), BorderLayout.LINE_START);
-        this.getContentPane().add(createLattice(), BorderLayout.CENTER);
-        //this.pack();
-		this.setLocation(30, 30);
-		this.setSize(1046, 700);
-		this.setVisible(true);
-		this.show();
-		 
-		//mLayers = new Vector<Layer>();
-		
-		if (type == MainWindow.GAME_OF_LIFE) {
-			mCA = new GameOfLife(w, h, 2, boundary);
-	    	mCA.initialCondition();
-	    	for (int i = 0; i < mCA.getLayersSize(); i++)
-	    		mLayerModel.addElement(new String(mCA.getLayerName(i)));
-	    	mGUICA.setCellularAutomataModel(mCA);
-	    	setTitle("Game of life model");	
-	    	return;
-		}
- 
-	}//public SimuWindow() {    
-    
-    public SimpleCA2DModel getModel() { return mCA; }
-    /*
-     * Creates menu components
-     */
+    }
+
+    public SimpleCA2DModel getModel() { return this.mCA; }
+
     private void createMenu() {
 		mMenuHash = new int[ITENS];
          
@@ -187,164 +126,7 @@ public class SimuWindow extends JInternalFrame{
         this.setJMenuBar(mMenuBar);
 //--------------------------------------------------------------------------------------------------
 	}
-	
-    /*
-     * Creates layer GUI component - It is a List
-     * 
-     */
-    private JPanel createLayer() {
-    	int w = 140,
-    	    h = 530;
-    	
-    	mLayerModel =  new DefaultListModel();
-    	
-        mLayerList = new<String> JList();
-		mLayerList.setModel(mLayerModel);
-		
-		Dimension d = new Dimension(w, h);
-		mLayerList.setSize(d);
-		mLayerList.setMinimumSize(d);
-		mLayerList.setMaximumSize(d);
-		mLayerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//mLayerList.addMouseListener(null);
-		mLayerList.addMouseListener(new MouseAdapter() {
-	        public void mousePressed(MouseEvent e) {
-	            if (e.getButton() == MouseEvent.BUTTON3) {
-	                JPopupMenu menu = new JPopupMenu();
-	                JMenuItem item = new JMenuItem("Data");
-	                
-	                item.addActionListener(new ActionListener() {
-	                    public void actionPerformed(ActionEvent e) {
-	                    	SimuWindowData swd = new SimuWindowData(mCA.getLayerName(mLayerList.getSelectedIndex()));
-	                    	mPainel.add(swd);
-	                    	swd.toFront();
-	                    	swd.setLog(mCA.getLogBasedOnLayer(mLayerList.getSelectedIndex()));
-	                    	//System.out.println("Your option was: " + Integer.toString(mLayerList.getSelectedIndex()));
-	                    }//public void actionPerformed(ActionEvent e) {
-	                });// item.addActionListener(new ActionListener() {
-	                menu.add(item);
-	                //tem erro aqui, possivelmente colocar a Jframe pai deste item no lugar
-	                
-	                menu.show(mPtr, e.getX()+10, e.getY()+60);
-	                //menu.show(this, 5, mLayerList.getCellBounds(
-	                //		mLayerList.getSelectedIndex() + 1,
-	                //		mLayerList.getSelectedIndex() + 1).y);
-	            }
-	        }
-	    });
-		
-		/*
-		mLayerList.addListSelectionListener(new ListSelectionListener() {
 
-			@Override
-			public void valueChanged(ListSelectionEvent event) {
-				// TODO Auto-generated method stub
-				if (!event.getValueIsAdjusting()){
-					int a = event.getFirstIndex();
-					int b = event.getLastIndex();
-		            JList source = (JList)event.getSource();
-		            System.out.println("!getValueIsAdjusting");
-		            System.out.println(source.getSelectedValue().toString());
-		            System.out.println(a);
-		            System.out.println(b);
-		        }else {
-		        	int a = event.getFirstIndex();
-					int b = event.getLastIndex();
-		            JList source = (JList)event.getSource();
-		            System.out.println("getValueIsAdjusting");
-		            System.out.println(source.getSelectedValue().toString());
-		            System.out.println(a);
-		            System.out.println(b);
-		        }
-			}
-			
-		});
-		*/
-		LogPanel panel = new LogPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		
-		mLayerList.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Layers/Attributes"));
-		panel.add(Box.createVerticalStrut(2));
-        panel.add(mLayerList);
-        panel.add(Box.createVerticalStrut(2));
-        d = new Dimension(w+5, h+5);
-        panel.setSize(d);
-        panel.setMinimumSize(d);
-        panel.setMaximumSize(d);
-        panel.setPreferredSize(d);
-
-        d = null;
-        return panel;
-        
-    }
-    
-    /*
-     * Creates layer GUI components
-     */
-    private JPanel createLattice() {
-    	JPanel panel = new JPanel();
-    	
-    	GUICA p1 = new GUICA();
-    	mGUICA = p1;
-		//mGUIA.setCellularAutomataModel(new models.CellularAutomataModel());
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Lattice"));
-		panel.add(Box.createVerticalStrut(2));
-        panel.add(p1);
-        panel.add(Box.createVerticalStrut(2));
-
-        //BoxLayout.PAGE_AXIS -> horizontal orientation
-		//BoxLayout.LINE_AXIS -> vertical orientation
-		return panel;
-        
-    }
-
-    private void runSimulationBG() {
-    	
-    	if (mThreadBG != null) {
-    		boolean ret =  mThreadBG.isAlive();
-    		mThreadBG.setIsRunningFalse();
-    		try {
-    			mThreadBG.join();
-    		} catch (InterruptedException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    		mThreadBG = null;
-    		if (ret) return;
-    	}//if (mThreadBG != null) {
-    	
-    	NumberFormat format = NumberFormat.getInstance();
-    	format.setGroupingUsed(false);
-	    NumberFormatter formattert = new NumberFormatter(format);
-	    formattert.setValueClass(Integer.class);
-	    formattert.setMinimum(0);
-	    formattert.setMaximum(Integer.MAX_VALUE);
-	    formattert.setAllowsInvalid(false);
-	    // If you want the value to be committed on each keystroke instead of focus lost
-	    formattert.setCommitsOnValidEdit(true);
-
-	    JFormattedTextField timesteps = new JFormattedTextField(formattert);
-	    timesteps.setText("1000");
-		
-		JComponent[] inputs = new JComponent[] {
-		        new JLabel("Timesteps: "),timesteps,
-		};
-		
-		int result = JOptionPane.showConfirmDialog(null, inputs, "CA in background timesteps", JOptionPane.PLAIN_MESSAGE);
-		if (result == JOptionPane.OK_OPTION) {
-		    System.out.println("Your options:" + timesteps.getText());
-		    int ts = Integer.parseInt(timesteps.getText());
-		    mThreadBG = new BGThread(mCA, mGUICA, ts);
-		    mThreadBG.start();
-		} else {
-		    System.out.println("User canceled / closed the dialog, result = " + result);
-		    mThreadBG = null;
-		}
-    }//private void runSimulationBG() {
-    
-    
     private void runSimulationFG() {
     	if (mThreadFG == null) {
     		mThreadFG = new FGThread(mCA, mGUICA);
@@ -359,12 +141,12 @@ public class SimuWindow extends JInternalFrame{
     		}
     		mThreadFG = null;
     	}
-    }//private void runSimulation() {
-    
-    /*! \class BGThread
-		\brief BGThread computes Cellular Automata in background. It executes n steps before stopping
-    */
-    private class BGThread extends Thread{
+    }//private void runSimula
+
+
+    //--------------------------------------------------------------------------------------------------
+    //Private classes
+      private class BGThread extends Thread{
     	protected boolean mIsRunning = false;
     	public synchronized void setIsRunningTrue() {mIsRunning = true;}
     	public synchronized void setIsRunningFalse() {mIsRunning = false;}
@@ -484,9 +266,6 @@ public class SimuWindow extends JInternalFrame{
     	
     }
     
-    /*! \class MenuEvent
-    	\brief MenuEvent is a menu event class of this SimuWindow. Each menu entry calls SimuWindow method.
-    */
     private class MenuEvent implements ActionListener{
 
         @Override

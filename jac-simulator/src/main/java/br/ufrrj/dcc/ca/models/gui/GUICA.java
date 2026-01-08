@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.gui;
+package br.ufrrj.dcc.ca.models.gui;
 
 import java.awt.Color;
 import java.awt.Component;

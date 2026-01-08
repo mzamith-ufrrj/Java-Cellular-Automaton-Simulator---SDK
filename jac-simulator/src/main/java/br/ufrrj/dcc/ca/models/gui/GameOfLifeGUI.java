@@ -4,7 +4,9 @@ import java.text.NumberFormat;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.text.NumberFormatter;
@@ -12,13 +14,15 @@ import javax.swing.text.NumberFormatter;
 import br.ufrrj.dcc.ca.gui.SimuWindow;
 
 public class GameOfLifeGUI implements SimpleCA2DGUI{
+    
     public GameOfLifeGUI(){
         super();
 
     }
 
     @Override
-    public void init_component (){
+    public void init_component (JDesktopPane p){
+        //It is called
         NumberFormat format = NumberFormat.getInstance();
         format.setGroupingUsed(false);
         NumberFormatter formatterx = new NumberFormatter(format);
@@ -78,4 +82,6 @@ public class GameOfLifeGUI implements SimpleCA2DGUI{
             System.out.println("User canceled / closed the dialog, result = " + result);
         }
     }//public void init (){
+
+    
 }
