@@ -83,7 +83,7 @@ public class SimuWindow extends JInternalFrame{
     private DefaultListModel mLayerModel = null;
     //private Vector<Layer>mLayers = null;
     private GUICA mGUICA = null;
-    private SimpleCAModel mCA = null;
+    private SimpleCA2DModel mCA = null;
     																																																																																																														
     
     private BGThread mThreadBG = null;
@@ -107,7 +107,7 @@ public class SimuWindow extends JInternalFrame{
 		mPtr = this;
 		closeFrameEvent();
         createMenu();
-    	Settings s = new Settings(modelname);
+    	//Settings s = new Settings(modelname);
     	
     	//AQUI
     }
@@ -130,7 +130,7 @@ public class SimuWindow extends JInternalFrame{
 		//mLayers = new Vector<Layer>();
 		
 		if (type == MainWindow.GAME_OF_LIFE) {
-			mCA = new GameOfLife(w, h, boundary);
+			mCA = new GameOfLife(w, h, 2, boundary);
 	    	mCA.initialCondition();
 	    	for (int i = 0; i < mCA.getLayersSize(); i++)
 	    		mLayerModel.addElement(new String(mCA.getLayerName(i)));
@@ -138,19 +138,10 @@ public class SimuWindow extends JInternalFrame{
 	    	setTitle("Game of life model");	
 	    	return;
 		}
-		
-		if (type == MainWindow.SEGREGATION_2) {
-			mCA = new SegregationModel(w, h, boundary);
-	    	mCA.initialCondition();
-	    	for (int i = 0; i < mCA.getLayersSize(); i++)
-	    		mLayerModel.addElement(new String(mCA.getLayerName(i)));
-	    	mGUICA.setCellularAutomataModel(mCA);
-	    	setTitle("Segregation model");
-	    	return;
-		}
+ 
 	}//public SimuWindow() {    
     
-    public SimpleCAModel getModel() { return mCA; }
+    public SimpleCA2DModel getModel() { return mCA; }
     /*
      * Creates menu components
      */
@@ -375,10 +366,10 @@ public class SimuWindow extends JInternalFrame{
     	public synchronized void setIsRunningTrue() {mIsRunning = true;}
     	public synchronized void setIsRunningFalse() {mIsRunning = false;}
     	public synchronized boolean getIsRunning() {return mIsRunning;}
-    	protected SimpleCAModel mCA = null;
+    	protected SimpleCA2DModel mCA = null;
     	protected GUICA mGUICA = null;
     	private int mTS = -1;
-    	public BGThread(SimpleCAModel ca, GUICA guica, int ts) {
+    	public BGThread(SimpleCA2DModel ca, GUICA guica, int ts) {
     		super();
     		this.mCA = ca;
     		this.mGUICA = guica;
@@ -425,7 +416,7 @@ public class SimuWindow extends JInternalFrame{
     */
     private class FGThread extends BGThread{
     	
-		public FGThread(SimpleCAModel ca, GUICA guica) {
+		public FGThread(SimpleCA2DModel ca, GUICA guica) {
     		super(ca, guica, 0);
     		
     	}

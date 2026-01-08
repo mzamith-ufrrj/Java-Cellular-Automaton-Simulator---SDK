@@ -2,15 +2,15 @@ package br.ufrrj.dcc.ca.models;
 
 import java.util.Vector;
 
-public class GameOfLife extends CellularAutomataModel {
+public class GameOfLife extends SimpleCA2DModel {
 	private final int DEAD = 0;
 	private final int LIVE = 1;
 	private int [][]mMoore = null;	
 
 	private Vector<Integer> mLive, mDead;
 	
-	public GameOfLife(int w, int h, String boundary) {
-		super(w, h, boundary);
+	public GameOfLife(int w, int h, int s, String boundary) {
+		super(w, h, s, boundary);
 		mMoore = new int[3][3];
 		
 		mLive = new Vector<Integer>();

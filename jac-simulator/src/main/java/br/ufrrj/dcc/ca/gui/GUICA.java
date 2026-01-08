@@ -32,12 +32,12 @@ public class GUICA extends JPanel{
 					mWidth = 0.0f,
 				    mHeight = 0.0f;
 	
-	private SimpleCAModel mCA = null;
+	private SimpleCA2DModel mCA = null;
 	private boolean mHasCA = false;
 	
 	private final Color COLOR[] = new Color[6];
 	
-	public void setCellularAutomataModel(SimpleCAModel ca) {
+	public void setCellularAutomataModel(SimpleCA2DModel ca) {
 		mCA = ca;
 		if (mCA != null)
 			mHasCA = true;

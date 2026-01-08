@@ -1,7 +1,7 @@
 package br.ufrrj.dcc.ca.gui;
 
 import javax.swing.JInternalFrame;
-import br.ufrrj.dcc.ca.models.CellularAutomataModel;
+import br.ufrrj.dcc.ca.models.SimpleCA2DModel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
