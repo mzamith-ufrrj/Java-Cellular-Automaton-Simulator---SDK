@@ -36,7 +36,7 @@ public class GUICA extends JPanel{
 	private SimpleCA2DModel mCA = null;
 	private boolean mHasCA = false;
 	
-	private final Color COLOR[] = new Color[6];
+	private final Color COLOR[] = new Color[256];
 	
 	public void setCellularAutomataModel(SimpleCA2DModel ca) {
 		mCA = ca;
@@ -79,13 +79,13 @@ public class GUICA extends JPanel{
 		
 		//set color in according to state
 		//vector color index is given by state
-		COLOR[0] = Color.red;
-		COLOR[1] = Color.green;
-		COLOR[2] = Color.blue;
-		COLOR[3] = Color.yellow;
-		COLOR[4] = Color.orange;
-		COLOR[5] = Color.white;
-		
+		// Supondo que COLOR seja seu Vector<Color> ou Array Color[]
+		for (int i = 0; i < 256; i++) {
+			// h varia de 0.0 a 1.0 (cobre todo o espectro de cores)
+			float h = i / 256.0f; 
+			COLOR[i] = Color.getHSBColor(h, 0.8f, 0.9f); 
+		}
+				
 		
 
 	}//public GuiCA() {
@@ -105,15 +105,6 @@ public class GUICA extends JPanel{
     			if (s > 0) {
     				g2d.setColor(COLOR[s]);
     				g2d.fill(new Rectangle2D.Float(i * mScaleX, j * mScaleY, mScaleX, mScaleY ));
-    				
-    				/*
-    				float sx9 = mScaleX * 0.8f;
-    				float sy9 = mScaleY * 0.8f;
-    				float sx1 = (mScaleX * 0.2f)/2.0f;
-    				float sy1 = (mScaleY * 0.2f)/2.0f;
-    				
-    				g2d.fill(new Rectangle2D.Float(i * sx9 + sx1, j * sy9 + sy1, sx9, sy9 ));
-					*/
     			}
     				
     		}//for (int i = 0; i < mCA.getWidth(); i++) {

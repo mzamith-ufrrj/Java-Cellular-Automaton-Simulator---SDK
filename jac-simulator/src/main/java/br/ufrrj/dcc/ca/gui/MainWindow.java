@@ -85,7 +85,7 @@ public class MainWindow  extends JFrame {
     	
 
     	
-		@SuppressWarnings("unchecked")
+		 
 		private void createMenu() {
 			mMenuHash.clear();
             //int index = 0;
@@ -100,48 +100,14 @@ public class MainWindow  extends JFrame {
 
 			for (Map.Entry<String, SimpleCA2DGUI> entry : mMapCA2D.entrySet()) {
 				String chave = entry.getKey();
-				SimpleCA2DGUI valor = entry.getValue();
 				mMenuItem = new JMenuItem(chave);
 				mMenuItem.addActionListener(menuEvent);
 				mMenuHash.add(mMenuItem.hashCode());
 				mSubmenu.add(mMenuItem);
 			}
 			
-			//Supose that we can identify the 2d AC
-
-            
-            
-            
-            
-            
-			//This part will be automatic 2026-01-08
-			/* 
-            mMenuItem = new JMenuItem("Prisoner's Dilemma");
-            mMenuItem.addActionListener(menuEvent);
-            mMenuHash[PRISONERS_DILEMMA] = mMenuItem.hashCode();
-            mSubmenu.add(mMenuItem);
-            
-            mMenuItem = new JMenuItem("Predator-Prey");
-            mMenuItem.addActionListener(menuEvent);
-            mMenuHash[PREDATOR_PREY] = mMenuItem.hashCode();
-            mSubmenu.add(mMenuItem);
-            
-            mMenuItem = new JMenuItem("Segregation two-classes");
-            mMenuItem.addActionListener(menuEvent);
-            mMenuHash[SEGREGATION_2] = mMenuItem.hashCode();
-            mSubmenu.add(mMenuItem);
-            */
             mMenu.add(mSubmenu);
 			
-  //--------------------------------------------------------------------
-            /*
-  			mMenuItem = new JMenuItem("Load native code simulation");
-            mMenuItem.addActionListener(menuEvent);
-            mMenuHash[NATIVE_SIMULATION] = mMenuItem.hashCode();
-            mMenu.add(mSubmenu);
-             */
-//--------------------------------------------------------------------
-
             mMenu.addSeparator();
             mMenuItem = new JMenuItem("Exit");
             mMenuItem.addActionListener(menuEvent);
