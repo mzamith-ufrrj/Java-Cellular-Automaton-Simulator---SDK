@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.inter;
+package br.ufrrj.dcc.ca.models.logic;
 
 /**
  * @class CellularAutomataInterface

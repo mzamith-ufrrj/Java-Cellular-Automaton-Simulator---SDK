@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 
 import br.ufrrj.dcc.ca.models.*;
+import br.ufrrj.dcc.ca.models.logic.SimpleCA2DModel;
 
 //https://stackoverflow.com/questions/33937377/how-to-draw-on-jpanel-with-jogl
 public class GUICA extends JPanel{

@@ -27,8 +27,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.NumberFormatter;
 
+import br.ufrrj.dcc.ca.models.gui.*;
+import br.ufrrj.dcc.ca.models.logic.GameOfLife;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 
 /**
@@ -36,7 +41,7 @@ import javax.swing.text.NumberFormatter;
  */
 public class MainWindow  extends JFrame {
 		private static final int BOUNDARY = 50;
-		private static final int ITENS  = 9;
+		 
 		
 		 
 		private static final int EXIT_CLOSE				= 0;
@@ -49,13 +54,24 @@ public class MainWindow  extends JFrame {
 	    private JMenuItem mMenuItem = null;
 	    
 	    private JDesktopPane mPainel =  null;
-	    private int []mMenuHash;
+	    
+		private Vector<Integer> mMenuHash = null;
+
+		private Map<String, SimpleCA2DGUI> mMapCA2D = null;
 	    
     	public MainWindow() {
             this.setTitle("Cellular automata simulation");
             //this.setExtendedState(JFrame.MAXIMIZED_BOTH); // To maximize a frame
             //int bordas = 50;
-            
+            //--------------------------------------------------------------------------------
+			//brefore menu creation - Attention when you load jar file
+			mMapCA2D = new HashMap<>();
+			mMapCA2D.put("Game of Life Version 2.0", new GameOfLifeGUI());
+			
+			mMenuHash = new Vector<Integer>();
+
+			//--------------------------------------------------------------------------------
+
             Dimension tela = Toolkit.getDefaultToolkit().getScreenSize();
             setBounds(BOUNDARY, BOUNDARY, tela.width  - BOUNDARY * 2 , tela.height - BOUNDARY * 2);
             
@@ -69,8 +85,9 @@ public class MainWindow  extends JFrame {
     	
 
     	
+		@SuppressWarnings("unchecked")
 		private void createMenu() {
-    		mMenuHash = new int[ITENS];
+			mMenuHash.clear();
             //int index = 0;
             
             MenuEvent menuEvent = new MenuEvent();
@@ -81,10 +98,21 @@ public class MainWindow  extends JFrame {
 //--------------------------------------------------------------------
             mSubmenu = new JMenu("Autômatos Celulares 2D");
 
-            mMenuItem = new JMenuItem("Game of life");
-            mMenuItem.addActionListener(menuEvent);
-            mMenuHash[GAME_OF_LIFE] = mMenuItem.hashCode();
-            mSubmenu.add(mMenuItem);
+			for (Map.Entry<String, SimpleCA2DGUI> entry : mMapCA2D.entrySet()) {
+				String chave = entry.getKey();
+				SimpleCA2DGUI valor = entry.getValue();
+				mMenuItem = new JMenuItem(chave);
+				mMenuItem.addActionListener(menuEvent);
+				mMenuHash.add(mMenuItem.hashCode());
+				mSubmenu.add(mMenuItem);
+			}
+			
+			//Supose that we can identify the 2d AC
+
+            
+            
+            
+            
             
 			//This part will be automatic 2026-01-08
 			/* 
@@ -117,75 +145,16 @@ public class MainWindow  extends JFrame {
             mMenu.addSeparator();
             mMenuItem = new JMenuItem("Exit");
             mMenuItem.addActionListener(menuEvent);
-            mMenuHash[EXIT_CLOSE] = mMenuItem.hashCode();
+            mMenuHash.add(mMenuItem.hashCode());
             mMenu.add(mMenuItem);
 
             mMenu    = new JMenu("About");
-            mMenuHash[ABOUT] = mMenuItem.hashCode();
+            mMenuHash.add(mMenuItem.hashCode());
             mMenuBar.add(mMenu);
             
             this.setJMenuBar(mMenuBar);
     	}
     	
-    	private void call_game_of_life() {
-    	   	NumberFormat format = NumberFormat.getInstance();
-    	   	format.setGroupingUsed(false);
-    	    NumberFormatter formatterx = new NumberFormatter(format);
-    	    formatterx.setValueClass(Integer.class);
-    	    formatterx.setMinimum(0);
-    	    formatterx.setMaximum(Integer.MAX_VALUE);
-    	    formatterx.setAllowsInvalid(false);
-    	    // If you want the value to be committed on each keystroke instead of focus lost
-    	    formatterx.setCommitsOnValidEdit(true);
-
-    	    NumberFormatter formattery = new NumberFormatter(format);
-    	    formattery.setValueClass(Integer.class);
-    	    formattery.setMinimum(0);
-    	    formattery.setMaximum(Integer.MAX_VALUE);
-    	    formattery.setAllowsInvalid(false);
-    	    // If you want the value to be committed on each keystroke instead of focus lost
-    	    formattery.setCommitsOnValidEdit(true);
-
-    	    
-    	    JFormattedTextField x_axis = new JFormattedTextField(formatterx);
-    	    JFormattedTextField y_axis = new JFormattedTextField(formattery);
-			x_axis.setText("100");
-			y_axis.setText("80");
-			
-			//JTextField x_axis = new JTextField("100");
-			//JTextField y_axis = new JTextField("80");
-			String s1[] = {"periodic", "reflexive", "constant [0]", "constant [1]"};
-			JComboBox<String> combo = new<String>JComboBox<String>(s1);
-			 
-			
-			
-			JComponent[] inputs = new JComponent[] {
-			        new JLabel("x-axis lenght"),x_axis,
-			        new JLabel("y-axis lenght"),y_axis,
-			        new JLabel("Boundary condition"), combo
-			};
-			
-			
-			int result = JOptionPane.showConfirmDialog(null, inputs, "Game of Life - SETUP", JOptionPane.PLAIN_MESSAGE);
-			if (result == JOptionPane.OK_OPTION) {
-			    System.out.println("Your options:" +
-			    		x_axis.getText() + ", " +
-			    		y_axis.getText() + ", " +
-			    		String.valueOf(combo.getSelectedItem()));
-			    
-			    SimuWindow s = new SimuWindow(GAME_OF_LIFE, 
-			    		Integer.valueOf(x_axis.getText()), 
-			    		Integer.valueOf(y_axis.getText()), 
-			    		String.valueOf(combo.getSelectedItem()), mPainel);
-			  
-            	mPainel.add(s);
-			
-			} else {
-			    System.out.println("User canceled / closed the dialog, result = " + result);
-			}
-
-    	}
-
     	
     	/*
     	 * Class listens menu click event
@@ -194,6 +163,39 @@ public class MainWindow  extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+				boolean found = false;
+				int i = 0;
+				int option = -1;
+				while ((i < mMenuHash.size()) && (!found)){
+					Integer opt = mMenuHash.get(i);
+					if (e.getSource().hashCode() == opt){
+                        option = i;
+                        found = true;
+                    }
+					i++;
+				}
+				if (option == mMenuHash.size() - 2){
+					System.exit(0);
+					return;
+				}
+
+				if (option == mMenuHash.size() - 1){
+					JOptionPane.showMessageDialog(null,"ABOUT","TITULO", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
+				i = 0;
+				for (Map.Entry<String, SimpleCA2DGUI> entry : mMapCA2D.entrySet()) {
+					String chave = entry.getKey();
+					SimpleCA2DGUI valor = entry.getValue();
+					if (option == i){
+						valor.init_component();
+						break;
+					}
+					
+				}
+				System.out.println("All your bases are belong to us!");
+				/*
             	JFileChooser fileChooser = null;
             	FileNameExtensionFilter filter = null;
                 int option = -1;
@@ -205,12 +207,13 @@ public class MainWindow  extends JFrame {
                 }
                 switch (option){
                 
-                case EXIT_CLOSE:System.exit(0);
-                case ABOUT:JOptionPane.showMessageDialog(null,"ABOUT","TITULO", JOptionPane.INFORMATION_MESSAGE);break;
+                	case EXIT_CLOSE:
+                	case ABOUT:JOptionPane.showMessageDialog(null,"ABOUT","TITULO", JOptionPane.INFORMATION_MESSAGE);break;
                 
-                case GAME_OF_LIFE:call_game_of_life();break;
+                	//case GAME_OF_LIFE:call_game_of_life();break;
 
                 }
+					 */
             }//end-public void actionPerformed(ActionEvent e) {
 
 

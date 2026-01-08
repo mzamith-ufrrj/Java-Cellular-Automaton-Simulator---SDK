@@ -54,6 +54,8 @@ import javax.swing.text.NumberFormatter;
 
 
 import br.ufrrj.dcc.ca.models.*;
+import br.ufrrj.dcc.ca.models.logic.GameOfLife;
+import br.ufrrj.dcc.ca.models.logic.SimpleCA2DModel;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

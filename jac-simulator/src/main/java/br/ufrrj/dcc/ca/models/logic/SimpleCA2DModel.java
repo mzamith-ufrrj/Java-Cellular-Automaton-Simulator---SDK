@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.models;
+package br.ufrrj.dcc.ca.models.logic;
 
 /**
  * @class SimpleCA2DModel
@@ -6,7 +6,7 @@ package br.ufrrj.dcc.ca.models;
  * * This class provides the standard structure for a 2D CA, including 
  * double-buffering lattices (mS0, mS1) and simulation state management.
  */
-public class SimpleCA2DModel implements br.ufrrj.dcc.ca.inter.CellularAutomata2DInterface {
+public class SimpleCA2DModel implements br.ufrrj.dcc.ca.models.logic.CellularAutomata2DInterface {
 	/** @brief State indicating the model is not yet defined */
     protected static final int CLASS_STATE_NOT_DEFINED                  = -1;
     

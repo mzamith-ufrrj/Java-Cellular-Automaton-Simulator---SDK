@@ -1,7 +1,6 @@
 package br.ufrrj.dcc.ca.gui;
 
 import javax.swing.JInternalFrame;
-import br.ufrrj.dcc.ca.models.SimpleCA2DModel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -23,6 +22,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import br.ufrrj.dcc.ca.models.logic.SimpleCA2DModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;

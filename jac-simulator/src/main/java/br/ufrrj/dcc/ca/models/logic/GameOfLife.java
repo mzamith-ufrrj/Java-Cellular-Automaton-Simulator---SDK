@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.models;
+package br.ufrrj.dcc.ca.models.logic;
 
 import java.util.Vector;
 
