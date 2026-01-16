@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.models.logic;
+package br.ufrrj.dcc.ca.models.two;
 
 /**
  * @class CellularAutomataInterface
@@ -6,7 +6,7 @@ package br.ufrrj.dcc.ca.models.logic;
  * * This interface defines the core contract for any Cellular Automata simulation,
  * covering initialization, state transition, and lattice access.
  */
-public interface CellularAutomata2DInterface {
+public interface LogicCA2DInterface {
 	
 	/**
      * @brief Sets the initial condition of the simulation.

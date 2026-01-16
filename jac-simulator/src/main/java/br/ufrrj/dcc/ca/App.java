@@ -1,5 +1,5 @@
 package br.ufrrj.dcc.ca;
-import br.ufrrj.dcc.ca.gui.MainWindow;
+import br.ufrrj.dcc.ca.MainWindow;
 /**
  * Hello world!
  *

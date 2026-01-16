@@ -1,4 +1,4 @@
-package br.ufrrj.dcc.ca.models.gui;
+package br.ufrrj.dcc.ca;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,11 +21,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 
-import br.ufrrj.dcc.ca.models.*;
-import br.ufrrj.dcc.ca.models.logic.SimpleCA2DModel;
+import br.ufrrj.dcc.ca.models.two.*;
+
 
 //https://stackoverflow.com/questions/33937377/how-to-draw-on-jpanel-with-jogl
-public class GUICA extends JPanel{
+public class GUI2DCA extends JPanel{
 	
 	
 	private float 	mScaleX = 0.0f,
@@ -33,12 +33,12 @@ public class GUICA extends JPanel{
 					mWidth = 0.0f,
 				    mHeight = 0.0f;
 	
-	private SimpleCA2DModel mCA = null;
+	private LogicSimpleCA2D mCA = null;
 	private boolean mHasCA = false;
 	
 	private final Color COLOR[] = new Color[256];
 	
-	public void setCellularAutomataModel(SimpleCA2DModel ca) {
+	public void setCellularAutomataModel(LogicSimpleCA2D ca) {
 		mCA = ca;
 		if (mCA != null)
 			mHasCA = true;
@@ -57,7 +57,7 @@ public class GUICA extends JPanel{
 		}
 		repaint();
 	}//public void loadMesh() {
-	public GUICA() {
+	public GUI2DCA() {
 		super();
 		/*Dimension d = new Dimension(mWidth+3, mHeight+3);
 		setSize(d);

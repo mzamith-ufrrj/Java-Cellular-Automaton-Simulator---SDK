@@ -1,5 +1,4 @@
-package br.ufrrj.dcc.ca.models.gui;
-
+package br.ufrrj.dcc.ca;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,11 +9,11 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class InternalCAData extends JInternalFrame{
+public class Internal2DCAData extends JInternalFrame{
 	private JTextArea mLog = null;
 	
 	
-	public InternalCAData(String layertitle) {
+	public Internal2DCAData(String layertitle) {
 		super(layertitle, true, true, true, false);
 		System.out.println("Constructor");
 		mLog = new JTextArea ();

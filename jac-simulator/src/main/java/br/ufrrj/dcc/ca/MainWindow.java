@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.ufrrj.dcc.ca.gui;
+package br.ufrrj.dcc.ca;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,12 +28,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import br.ufrrj.dcc.ca.models.gui.*;
-import br.ufrrj.dcc.ca.models.logic.GameOfLife;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import br.ufrrj.dcc.ca.models.two.*;
 
 
 /**
@@ -41,12 +41,8 @@ import java.util.Vector;
  */
 public class MainWindow  extends JFrame {
 		private static final int BOUNDARY = 50;
-		 
-		
-		 
 		private static final int EXIT_CLOSE				= 0;
-		public static final int GAME_OF_LIFE   			= 1;
-	 	private static final int ABOUT          		= 2;
+		private static final int ABOUT          		= 1;
 	
 	    private JMenuBar mMenuBar = null;
 	    private JMenu    mMenu    = null,
@@ -57,19 +53,14 @@ public class MainWindow  extends JFrame {
 	    
 		private Vector<Integer> mMenuHash = null;
 
-		private Map<String, SimpleCA2DGUI> mMapCA2D = null;
+		private Map<String, Internal2DCASIM> mMapCA2D = null;
 	    
     	public MainWindow() {
             this.setTitle("Cellular automata simulation");
             //this.setExtendedState(JFrame.MAXIMIZED_BOTH); // To maximize a frame
             //int bordas = 50;
             //--------------------------------------------------------------------------------
-			//brefore menu creation - Attention when you load jar file
-			mMapCA2D = new HashMap<>();
-			mMapCA2D.put("Game of Life Version 2.0", new GameOfLifeGUI());
 			
-			mMenuHash = new Vector<Integer>();
-
 			//--------------------------------------------------------------------------------
 
             Dimension tela = Toolkit.getDefaultToolkit().getScreenSize();
@@ -77,6 +68,16 @@ public class MainWindow  extends JFrame {
             
             mPainel = new JDesktopPane(); 
             mPainel.setBackground(Color.LIGHT_GRAY);
+
+			//brefore menu creation - Attention when you load jar file
+			mMapCA2D = new HashMap<>();
+			LogicGameOfLife l_gol = new LogicGameOfLife(100, 100, 2, "periodic");
+			Internal2DCASIM g_gol = new Internal2DCASIM("Game of Life v2.0");
+			g_gol.setCAModel(l_gol);
+			mMapCA2D.put("Game of Life Version 2.0", g_gol);
+			mMenuHash = new Vector<Integer>();
+
+
             this.setContentPane(mPainel);
             this.createMenu();
             this.setVisible(true);
@@ -98,7 +99,8 @@ public class MainWindow  extends JFrame {
 //--------------------------------------------------------------------
             mSubmenu = new JMenu("Autômatos Celulares 2D");
 
-			for (Map.Entry<String, SimpleCA2DGUI> entry : mMapCA2D.entrySet()) {
+			
+			for (Map.Entry<String, Internal2DCASIM> entry : mMapCA2D.entrySet()) {
 				String chave = entry.getKey();
 				mMenuItem = new JMenuItem(chave);
 				mMenuItem.addActionListener(menuEvent);
@@ -151,11 +153,13 @@ public class MainWindow  extends JFrame {
 				}
 
 				i = 0;
-				for (Map.Entry<String, SimpleCA2DGUI> entry : mMapCA2D.entrySet()) {
+				for (Map.Entry<String, Internal2DCASIM> entry : mMapCA2D.entrySet()) {
 					String chave = entry.getKey();
-					SimpleCA2DGUI valor = entry.getValue();
+					Internal2DCASIM valor = entry.getValue();
 					if (option == i){
-						valor.init_component();
+						valor.init_window(mPainel);
+						mPainel.add(valor);
+						System.out.println("Found!");
 						break;
 					}
 					
