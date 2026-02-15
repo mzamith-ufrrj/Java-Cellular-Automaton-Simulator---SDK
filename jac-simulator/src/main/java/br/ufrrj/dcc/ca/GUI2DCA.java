@@ -56,6 +56,7 @@ public class GUI2DCA extends JPanel{
 			mScaleY = mHeight / h;	
 		}
 		repaint();
+		repaint();
 	}//public void loadMesh() {
 	public GUI2DCA() {
 		super();
@@ -112,7 +113,7 @@ public class GUI2DCA extends JPanel{
     	
 //------------------------------------------------------------------------------------------------------------
     	
-    	
+    	/*
     	float dh = 0.0f;
     	g2d.setColor(Color.YELLOW);
     	while (dh <=  mWidth) {
@@ -126,7 +127,7 @@ public class GUI2DCA extends JPanel{
     		dh += mScaleY;
     	}
 
-    	
+    	 */
 
     }//drawgrid
     /*

@@ -1,5 +1,14 @@
 package br.ufrrj.dcc.ca.models.two;
 import java.util.List;
+
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.text.NumberFormatter;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
 /**
  * @class SimpleCA2DModel
@@ -64,9 +73,21 @@ public class LogicSimpleCA2D implements LogicCA2DInterface {
 		this.mS1 = null;
 		this.mCAState = CLASS_STATE_NOT_DEFINED;
 		this.mTotalStates = 0;
+			
+	
+	}
+
+	/*
+		A basic settings for 2D CA as Game of Life. Just boundary condition
+		and the lattice width and height 
+	*/
+	@Override
+	public boolean settings(){
+		return true;
 		
 	}
 	
+	/*
 	public LogicSimpleCA2D(int w, int h, int s, String b) {
 		this.mWidth = w;
 		this.mHeight = h;
@@ -77,7 +98,7 @@ public class LogicSimpleCA2D implements LogicCA2DInterface {
 		this.mTotalStates = s;
 		this.mBoundary =  new String(b);
 	}//public CellularAutomtaModel() {
-	
+	 */
 	/**
      * @brief Implementation of the initial condition setup.
      * Defines the starting configuration of the lattice.

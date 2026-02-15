@@ -30,6 +30,7 @@ public interface LogicCA2DInterface {
 	public void finalCondition();
 	
 
+     public boolean settings();
 	
 	/**
      * @brief Informs the CA code state.

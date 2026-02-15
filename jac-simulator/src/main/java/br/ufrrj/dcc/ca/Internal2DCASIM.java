@@ -74,7 +74,7 @@ public class Internal2DCASIM extends JInternalFrame{
     //private Vector<Layer>mLayers = null;
     private GUI2DCA mGUI2DCA = null;
     private LogicSimpleCA2D mCA = null;
-    																																																																																																														
+	private String mModelName = null;
     
     private BGThread mThreadBG = null;
     private FGThread mThreadFG = null;
@@ -82,25 +82,32 @@ public class Internal2DCASIM extends JInternalFrame{
 
     public Internal2DCASIM (String modelName){ 
 		super(modelName, true, true, true, false);
+		mModelName = new String(modelName);
 		this.mPtr = this; 
 		closeFrameEvent();
 	}
 
+	public String getModelName() { return mModelName; };
 	public void setCAModel(LogicSimpleCA2D ca){ this.mCA = ca;}
 	public void init_window(JDesktopPane p){
         
-		this.mPainel = p;
-		
-        createMenu(); 
+		boolean ret = this.mCA.settings();
+		if (ret){
+			this.mPainel = p;
+			
+			createMenu(); 
+			
+			this.getContentPane().add(createLayer(), BorderLayout.LINE_START);
+			this.getContentPane().add(createLattice(), BorderLayout.CENTER);
+			
+			//this.pack();
+			this.setLocation(30, 30);
+			this.setSize(1046, 700);
+			this.setVisible(true);
+			this.show();
+			mGUI2DCA.setCellularAutomataModel(this.mCA);
+		}
 
-		this.getContentPane().add(createLayer(), BorderLayout.LINE_START);
-        this.getContentPane().add(createLattice(), BorderLayout.CENTER);
-        //this.pack();
-		this.setLocation(30, 30);
-		this.setSize(1046, 700);
-		this.setVisible(true);
-		this.show();
-		mGUI2DCA.setCellularAutomataModel(mCA);
 	}
 
     public LogicSimpleCA2D getModel() { return this.mCA; }
@@ -178,6 +185,10 @@ public class Internal2DCASIM extends JInternalFrame{
 	                
 	                item.addActionListener(new ActionListener() {
 	                    public void actionPerformed(ActionEvent e) {
+							String text = mLayerList.getModel().getElementAt(mLayerList.getSelectedIndex());
+							System.out.println("Your option was: " + Integer.toString(mLayerList.getSelectedIndex()) + " -> value: " + text);
+							
+
 							//Change here 2026/01/16
 							/*
 							Internal2DCAData swd = new Internal2DCAData(mCA.getLayerName(mLayerList.getSelectedIndex()));
@@ -185,7 +196,7 @@ public class Internal2DCASIM extends JInternalFrame{
 	                    	swd.toFront();
 	                    	swd.setLog(mCA.getLogBasedOnLayer(mLayerList.getSelectedIndex()));
 							 */
-	                    	//System.out.println("Your option was: " + Integer.toString(mLayerList.getSelectedIndex()));
+	                    	
 	                    }//public void actionPerformed(ActionEvent e) {
 	                });// item.addActionListener(new ActionListener() {
 	                menu.add(item);

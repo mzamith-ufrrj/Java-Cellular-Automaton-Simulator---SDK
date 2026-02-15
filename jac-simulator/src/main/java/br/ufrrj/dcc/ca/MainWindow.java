@@ -69,12 +69,20 @@ public class MainWindow  extends JFrame {
             mPainel = new JDesktopPane(); 
             mPainel.setBackground(Color.LIGHT_GRAY);
 
-			//brefore menu creation - Attention when you load jar file
+			/*
+				
+				- The proposed pattener:
+			  		Graphic CA is build here and also inserted into mMapCA2D
+			  		so that it can be used in menu option. In this moment, the logical
+			  		part of CA must be instanced
+			 */  
 			mMapCA2D = new HashMap<>();
-			LogicGameOfLife l_gol = new LogicGameOfLife(100, 100, 2, "periodic");
+			
+			
+			LogicGameOfLife l_gol = new LogicGameOfLife();
 			Internal2DCASIM g_gol = new Internal2DCASIM("Game of Life v2.0");
 			g_gol.setCAModel(l_gol);
-			mMapCA2D.put("Game of Life Version 2.0", g_gol);
+			mMapCA2D.put(g_gol.getModelName(), g_gol);
 			mMenuHash = new Vector<Integer>();
 
 
