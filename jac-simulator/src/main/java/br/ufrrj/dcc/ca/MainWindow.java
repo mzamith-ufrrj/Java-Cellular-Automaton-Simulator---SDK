@@ -54,6 +54,8 @@ public class MainWindow  extends JFrame {
 		private Vector<Integer> mMenuHash = null;
 
 		private Map<String, Internal2DCASIM> mMapCA2D = null;
+
+		
 	    
     	public MainWindow() {
             this.setTitle("Cellular automata simulation");
@@ -69,6 +71,7 @@ public class MainWindow  extends JFrame {
             mPainel = new JDesktopPane(); 
             mPainel.setBackground(Color.LIGHT_GRAY);
 
+			 
 			/*
 				
 				- The proposed pattener:
@@ -79,8 +82,9 @@ public class MainWindow  extends JFrame {
 			mMapCA2D = new HashMap<>();
 			
 			
+			//2D Game of life
 			LogicGameOfLife l_gol = new LogicGameOfLife();
-			Internal2DCASIM g_gol = new Internal2DCASIM("Game of Life v2.0");
+			Internal2DCASIM g_gol = new Internal2DCASIM("Game of Life - rand mode");
 			g_gol.setCAModel(l_gol);
 			mMapCA2D.put(g_gol.getModelName(), g_gol);
 			mMenuHash = new Vector<Integer>();
@@ -103,9 +107,13 @@ public class MainWindow  extends JFrame {
             mMenuBar = new JMenuBar();
             mMenu    = new JMenu("Simulation");
             mMenuBar.add(mMenu);
+			mMenuItem = new JMenuItem("1D - Elementary Cellular Automata");;
 
+			mMenuItem.addActionListener(menuEvent);
+            mMenuHash.add(mMenuItem.hashCode());
+            mMenu.add(mMenuItem);
 //--------------------------------------------------------------------
-            mSubmenu = new JMenu("Autômatos Celulares 2D");
+            mSubmenu = new JMenu("2D - Cellular Automata");
 
 			
 			for (Map.Entry<String, Internal2DCASIM> entry : mMapCA2D.entrySet()) {
@@ -142,6 +150,16 @@ public class MainWindow  extends JFrame {
 				boolean found = false;
 				int i = 0;
 				int option = -1;
+
+				if (e.getSource().hashCode() ==  mMenuHash.get(i)){
+					System.out.println("CALL Elememtary CA");
+					Internal1DCA elementary = new Internal1DCA(mPainel);
+					mPainel.add(elementary);
+					found = true;
+				}
+				i++;
+				
+				//Taking into account there are several different models 2D CA
 				while ((i < mMenuHash.size()) && (!found)){
 					Integer opt = mMenuHash.get(i);
 					if (e.getSource().hashCode() == opt){
@@ -164,7 +182,7 @@ public class MainWindow  extends JFrame {
 				for (Map.Entry<String, Internal2DCASIM> entry : mMapCA2D.entrySet()) {
 					String chave = entry.getKey();
 					Internal2DCASIM valor = entry.getValue();
-					if (option == i){
+					if (option - 1 == i){
 						valor.init_window(mPainel);
 						mPainel.add(valor);
 						System.out.println("Found!");

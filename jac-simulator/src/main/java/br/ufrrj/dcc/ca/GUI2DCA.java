@@ -5,29 +5,31 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Line2D;
-import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
-import javax.swing.JComponent;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-
-import br.ufrrj.dcc.ca.models.two.*;
+import br.ufrrj.dcc.ca.models.two.LogicSimpleCA2D;
 
 
 //https://stackoverflow.com/questions/33937377/how-to-draw-on-jpanel-with-jogl
 public class GUI2DCA extends JPanel{
-	
-	
+	private GUI2DCA mPtr = null;
+	 
 	private float 	mScaleX = 0.0f,
 					mScaleY = 0.0f,
 					mWidth = 0.0f,
@@ -58,14 +60,15 @@ public class GUI2DCA extends JPanel{
 		repaint();
 		repaint();
 	}//public void loadMesh() {
-	public GUI2DCA() {
+	public GUI2DCA( ) {
 		super();
+		 
 		/*Dimension d = new Dimension(mWidth+3, mHeight+3);
 		setSize(d);
 		setMinimumSize(d);
 		setMaximumSize(d);
 		*/
-		
+		this.mPtr = this; 
 		mWidth = 858.0f;  mHeight = 530.0f;
 		//mCA = new CellularAutomataModel();
 		mHasCA = false;
@@ -173,6 +176,50 @@ public class GUI2DCA extends JPanel{
 			// TODO Auto-generated method stub
 			System.out.println("mouseClicked:" + arg0.getX() + "," + arg0.getY());
 			System.out.println("            :" + mWidth + "," + mHeight);
+			if (arg0.getButton() == MouseEvent.BUTTON3){
+				JPopupMenu menu = new JPopupMenu();
+				JMenuItem item = new JMenuItem("Export png");
+	                
+	                item.addActionListener(new ActionListener() {
+	                    public void actionPerformed(ActionEvent e) {
+							JFileChooser fileChooser = new JFileChooser();
+							fileChooser.setDialogTitle("Save As PNG - CA current state");
+							FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens PNG (*.png)", "png");
+							fileChooser.setFileFilter(filter);
+
+							int userSelection = fileChooser.showSaveDialog(mPtr);
+							String fullPath	= "";
+							if (userSelection == JFileChooser.APPROVE_OPTION) {
+								File fileToSave = fileChooser.getSelectedFile();
+								fullPath = fileToSave.getAbsolutePath();
+								
+								System.out.println("Salvando em: " + fullPath);
+							}
+							
+							if ((!mHasCA) || (userSelection != JFileChooser.APPROVE_OPTION)) return;
+							System.out.println("Saving image");
+							BufferedImage imagem = new BufferedImage(mCA.getWidth(), mCA.getHeight(), BufferedImage.TYPE_INT_RGB);
+							for (int j = 0; j < mCA.getHeight(); j++) {
+								for (int i = 0; i < mCA.getWidth(); i++) {
+									int s = mCA.getStateCell(i, j);
+									if (s > 0) {
+										imagem.setRGB(i, j, COLOR[s].getRGB());
+									}
+								}//for (int i = 0; i < mCA.getWidth(); i++) {
+							}//for (int j = 0; j < mCA.getHeight(); j++) {
+							try {
+								ImageIO.write(imagem, "png", new File(fullPath));
+							} catch (Exception exception) {
+								exception.printStackTrace();
+							}							
+	                    }//public void actionPerformed(ActionEvent e) {
+	                });// item.addActionListener(new ActionListener() {
+	                menu.add(item);
+	                //tem erro aqui, possivelmente colocar a Jframe pai deste item no lugar
+	                
+	                menu.show(mPtr, arg0.getX()+2, arg0.getY()+2);
+			}
+
 		}
 
 		@Override
