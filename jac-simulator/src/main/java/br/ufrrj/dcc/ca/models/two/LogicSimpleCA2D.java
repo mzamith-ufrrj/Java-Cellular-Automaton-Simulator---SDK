@@ -1,6 +1,6 @@
 package br.ufrrj.dcc.ca.models.two;
 import java.util.List;
-
+/*
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -10,6 +10,7 @@ import javax.swing.text.NumberFormatter;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+ */
 /**
  * @class SimpleCA2DModel
  * @brief Basic implementation of a 2D Cellular Automata model.

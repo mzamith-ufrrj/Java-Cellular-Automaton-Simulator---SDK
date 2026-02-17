@@ -15,18 +15,18 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+//import java.io.File;
+//import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
-import java.util.Vector;
+//import java.util.Locale;
+//import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
+//import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFormattedTextField;
@@ -37,21 +37,21 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+//import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
-import javax.swing.JTextField;
+//import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.TitledBorder;
+//import javax.swing.border.TitledBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+//import javax.swing.event.ListSelectionEvent;
+//import javax.swing.event.ListSelectionListener;
 import javax.swing.text.NumberFormatter;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.event.MenuEvent;
+//import javax.swing.event.MenuEvent;
 
 import br.ufrrj.dcc.ca.models.two.LogicSimpleCA2D;
 
@@ -266,6 +266,7 @@ public class Internal2DCASIM extends JInternalFrame{
     	
     	GUI2DCA p1 = new GUI2DCA();
     	mGUI2DCA = p1;
+		
 		//mGUIA.setCellularAutomataModel(new models.CellularAutomataModel());
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.setBorder( BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Lattice"));

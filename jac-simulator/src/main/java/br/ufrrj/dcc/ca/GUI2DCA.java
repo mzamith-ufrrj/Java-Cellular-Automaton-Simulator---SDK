@@ -198,7 +198,13 @@ public class GUI2DCA extends JPanel{
 							
 							if ((!mHasCA) || (userSelection != JFileChooser.APPROVE_OPTION)) return;
 							System.out.println("Saving image");
-							BufferedImage imagem = new BufferedImage(mCA.getWidth(), mCA.getHeight(), BufferedImage.TYPE_INT_RGB);
+							BufferedImage imagem = new BufferedImage(mPtr.getWidth(), mPtr.getHeight(), BufferedImage.TYPE_INT_RGB);
+							Graphics2D g2d = imagem.createGraphics();
+							mPtr.printAll(g2d);
+							
+							g2d.dispose();
+							//mCA.getWidth(), mCA.getHeight(), BufferedImage.TYPE_INT_RGB);
+							/*
 							for (int j = 0; j < mCA.getHeight(); j++) {
 								for (int i = 0; i < mCA.getWidth(); i++) {
 									int s = mCA.getStateCell(i, j);
@@ -207,6 +213,7 @@ public class GUI2DCA extends JPanel{
 									}
 								}//for (int i = 0; i < mCA.getWidth(); i++) {
 							}//for (int j = 0; j < mCA.getHeight(); j++) {
+							 */
 							try {
 								ImageIO.write(imagem, "png", new File(fullPath));
 							} catch (Exception exception) {
