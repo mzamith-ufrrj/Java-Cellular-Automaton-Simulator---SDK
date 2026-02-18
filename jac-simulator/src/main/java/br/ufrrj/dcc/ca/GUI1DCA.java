@@ -12,9 +12,11 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -33,12 +35,14 @@ public class GUI1DCA extends JPanel{
 
     private GUI1DCA mPtr = null;
 	private Elementary mElementaryCA = null;
+	private JDesktopPane mPainel =  null;
 
 	public void setElementaryCA(Elementary ca){
 		mElementaryCA = ca;
 		printMesh();
 	}
 
+	public void setDesktopPane(JDesktopPane p) { this.mPainel = p ;}
 
 	private void printMesh() {
 		if (mElementaryCA == null) return;
@@ -92,10 +96,70 @@ public class GUI1DCA extends JPanel{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			System.out.println("mouseClicked:" + arg0.getX() + "," + arg0.getY());
+			if (arg0.getButton() == MouseEvent.BUTTON3){
+				JPopupMenu menu = new JPopupMenu();
+				JMenuItem item = new JMenuItem("Export png");
+				item.addActionListener(new ActionListener() {
+	                    public void actionPerformed(ActionEvent e) {
+							JFileChooser fileChooser = new JFileChooser();
+							fileChooser.setDialogTitle("Save As PNG - CA current state");
+							FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens PNG (*.png)", "png");
+							fileChooser.setFileFilter(filter);
+
+							int userSelection = fileChooser.showSaveDialog(mPtr);
+							String fullPath	= "";
+							if (userSelection == JFileChooser.APPROVE_OPTION) {
+								File fileToSave = fileChooser.getSelectedFile();
+								fullPath = fileToSave.getAbsolutePath();
+								
+								System.out.println("Salvando em: " + fullPath);
+							}
+							
+							if ((mElementaryCA == null) || (userSelection != JFileChooser.APPROVE_OPTION)) return;
+							System.out.println("Saving image");
+							BufferedImage imagem = new BufferedImage(mPtr.getWidth(), mPtr.getHeight(), BufferedImage.TYPE_INT_RGB);
+							Graphics2D g2d = imagem.createGraphics();
+							mPtr.printAll(g2d);
+							
+							g2d.dispose();
+							//mCA.getWidth(), mCA.getHeight(), BufferedImage.TYPE_INT_RGB);
+							/*
+							for (int j = 0; j < mCA.getHeight(); j++) {
+								for (int i = 0; i < mCA.getWidth(); i++) {
+									int s = mCA.getStateCell(i, j);
+									if (s > 0) {
+										imagem.setRGB(i, j, COLOR[s].getRGB());
+									}
+								}//for (int i = 0; i < mCA.getWidth(); i++) {
+							}//for (int j = 0; j < mCA.getHeight(); j++) {
+							 */
+							try {
+								ImageIO.write(imagem, "png", new File(fullPath));
+							} catch (Exception exception) {
+								exception.printStackTrace();
+							}							
+	                    }//public void actionPerformed(ActionEvent e) {
+	                });// item.addActionListener(new ActionListener() {
+	                menu.add(item);
+	                //tem erro aqui, possivelmente colocar a Jframe pai deste item no lugar
+	                item = new JMenuItem("Show data");
+					item.addActionListener(new ActionListener() {
+	                    public void actionPerformed(ActionEvent e) {
+							if (mElementaryCA == null) return;
+							String text = "Elementary Cellular Automata information - " + mElementaryCA.getRuleName() ;
+							Internal2DCAData swd = new Internal2DCAData(text);
+							mPainel.add(swd);
+	                    	swd.toFront();
+							text = mElementaryCA.getInfo();
+							swd.setLog(text);
+								
+	                    }//public void actionPerformed(ActionEvent e) {
+	                });// item.addActionListener(new ActionListener() {
+					menu.add(item);
+	                menu.show(mPtr, arg0.getX()+2, arg0.getY()+2);
+			}//if (arg0.getButton() == MouseEvent.BUTTON3){
 			
-		}
+		}//public void mouseClicked(MouseEvent arg0) {
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {

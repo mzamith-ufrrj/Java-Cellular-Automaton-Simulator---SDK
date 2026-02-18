@@ -28,6 +28,10 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.NumberFormatter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import br.ufrrj.dcc.ca.models.one.Elementary;
 
@@ -39,9 +43,9 @@ public class Internal1DCA extends JInternalFrame{
     private JMenuItem mMenuItem = null;
     private JMenu     mMenu     = null;
 
-    private static final int ITENS  		= 7;
-    private static final int RUN            = 6;
-	private static final int LENGTH         = 5;
+    private static final int ITENS  		= 6;
+
+    private static final int RUN            = 5;
     private static final int RULE 			= 4;
     private static final int RAND_INIT 		= 0;
 	private static final int FILE_INIT      = 1;
@@ -52,17 +56,19 @@ public class Internal1DCA extends JInternalFrame{
     private static final String BOUNDARIES[] = {"periodic", "reflexive", "constant [0]", "constant [1]"};
 
     private int mRule = 90;
+    private boolean mIsRand = true;
     
     private String mFileName = "";
     private String mBoundary = "periodic";
     private int mTimestep = 100;
     private int mCALen = 100;
     private double mProb = 0.25f;
+    private String mInitialConditionString = "";
 
     private Elementary mCA = null;
-
+    private static final String TITLE = "Elememtary 1D - Rule: ";
     public Internal1DCA(JDesktopPane p){
-        super("Elememtary 1D", true, true, true, false);
+        super(TITLE, true, true, true, false);
         this.mPainel = p;
 		mPtr = this;
         this.setLocation(30, 30);
@@ -73,6 +79,7 @@ public class Internal1DCA extends JInternalFrame{
 
         JPanel panel = new JPanel();
         mGui1DCA = new GUI1DCA();
+        mGui1DCA.setDesktopPane(p);
         panel.add(mGui1DCA);
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Lattice"));
@@ -82,7 +89,7 @@ public class Internal1DCA extends JInternalFrame{
 
         
         this.getContentPane().add(panel);
-
+        this.setTitle(TITLE + Integer.toString(mRule));
 		closeFrameEvent();
     }
 
@@ -140,24 +147,56 @@ public class Internal1DCA extends JInternalFrame{
         mMenu.add(mMenuItem);
         this.setJMenuBar(mMenuBar);
 
-        mMenuItem = new JMenuItem("The mesh length");
-        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
-        mMenuItem.addActionListener(menuEvent);
-        mMenuHash[LENGTH] = mMenuItem.hashCode();
-        mMenu.add(mMenuItem);
-        this.setJMenuBar(mMenuBar);
+     
 //--------------------------------------------------------------------------------------------------
 	}
 
     private void run(){
-        int[] t0 = new int[100];
-        t0[50] = 1;
-        mCA = new Elementary(mRule, t0, mBoundary, mTimestep);
-        mCA.apply();
+        int[] t0;
+        if (mIsRand){
+            t0 = new int[mCALen];
+            for (int i = 0; i < mCALen; i++){
+                double p = Math.random();
+                if (p < mProb)
+                    t0[i] = 1;
+            }
+        }else{
+            //It is from file, read file text data to array
+            if (mInitialConditionString.compareTo("") == 0) return;
+            mCALen = mInitialConditionString.length();
+            t0 = new int[mCALen];
+            for (int i = 0; i < mCALen; i++){
+                char c = mInitialConditionString.charAt(i);
+                if ((c >= 0x30) && (c <= 0x39))
+                    t0[i] = c & 0x0F;
+            }
+        }
+        
+        if (mCA != null) {
+    		boolean ret =  mCA.isAlive();
+    		mCA.setIsRunningFalse();
+    		try {
+    			mCA.join();
+    		} catch (InterruptedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		mCA = null;
+    		if (ret) return;
+    	}//if (mThreadBG != null) {
+
+
+        mCA = new Elementary(this, mRule, t0, mBoundary, mTimestep);
         this.mGui1DCA.setElementaryCA(mCA);
-        this.mGui1DCA.repaint();
+        mCA.start();
+        
+        
     }
 
+    public void finish(){
+        this.mGui1DCA.repaint();
+       
+    }
     private void loadInitState(){
         File defaultFile = new File(mFileName);
 
@@ -175,7 +214,17 @@ public class Internal1DCA extends JInternalFrame{
             String filePath = selectedFile.getAbsolutePath();
             System.out.println("File selected: " + filePath);
             mFileName = new String(filePath);
+
         
+            try {
+                Path path = Paths.get(mFileName);
+                mInitialConditionString = Files.readString(path);
+                mIsRand = false;
+            } catch (IOException e) {
+                // Handle the exception (e.g., file not found)
+                e.printStackTrace();
+            }
+
         } else if (result == JFileChooser.CANCEL_OPTION) {
             System.out.println("User cancelled the operation.");
         }
@@ -227,6 +276,7 @@ public class Internal1DCA extends JInternalFrame{
             int result = JOptionPane.showConfirmDialog(null, inputs, "CA rule", JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 mRule = (Integer) spinner.getValue();
+                this.setTitle(TITLE + Integer.toString(mRule));
             }
     }
     private void setTimestep(){
@@ -238,6 +288,8 @@ public class Internal1DCA extends JInternalFrame{
                 mTimestep = (Integer) spinner.getValue();
             }
     }
+
+
     private class MenuEvent implements ActionListener{
 
         @Override
@@ -260,7 +312,7 @@ public class Internal1DCA extends JInternalFrame{
                 case TIME_STEPS:setTimestep();break;
                 case RULE:setRule();break;
                 case RUN:run();break;
-               
+                 
             }
 
         }//end-public void actionPerformed(ActionEvent e) {
