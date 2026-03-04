@@ -1,7 +1,7 @@
 package br.ufrrj.dcc.ca;
 import br.ufrrj.dcc.ca.MainWindow;
 /**
- * Hello world!
+ * Cellular Automata - Marcelo Zamith
  *
  */
 public class App 
