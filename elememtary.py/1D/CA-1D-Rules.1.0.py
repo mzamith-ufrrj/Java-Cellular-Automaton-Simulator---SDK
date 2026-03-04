@@ -4,7 +4,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import math
 import sys
 import random
-
+#Update
 def applyRule(matrix, T, X, BoundaryValue, BoundaryCondition, rule):
     for t in range(1, T):
         for x in range(0, X):
