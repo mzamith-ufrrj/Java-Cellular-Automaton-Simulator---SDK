@@ -162,7 +162,7 @@ public class Internal1DCA extends JInternalFrame{
                 if (p < mProb)
                     t0[i] = 1;
             }
-            mCA.setWhiteNoise(mProb, true);
+             
 
         }else{
             //It is from file, read file text data to array
@@ -175,7 +175,7 @@ public class Internal1DCA extends JInternalFrame{
                     t0[i] = c & 0x0F;
             }
 
-            mCA.setWhiteNoise(0.0f, false);
+             
         }
         
         if (mCA != null) {
@@ -194,6 +194,12 @@ public class Internal1DCA extends JInternalFrame{
 
         mCA = new Elementary(this, mRule, t0, mBoundary, mTimestep);
         this.mGui1DCA.setElementaryCA(mCA);
+        if (mIsRand){
+            mCA.setWhiteNoise(mProb, true);
+
+        }else{
+            mCA.setWhiteNoise(0.0f, false);
+        }
         mCA.start();
         
         

@@ -6,5 +6,8 @@ public interface ElementaryRuleInterface {
 
     String getRuleName();
 
-    double getK();
+    String getBinary();
+
+    double getB1s();
+    double getB0s();
 }

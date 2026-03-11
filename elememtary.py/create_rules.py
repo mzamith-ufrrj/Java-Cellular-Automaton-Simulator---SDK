@@ -36,7 +36,6 @@ def build_string(rule) -> str:
             f"* @version 1.0\n" \
             f"*/\n" \
             f"public class Rule_{rule:03d} implements ElementaryRuleInterface {{ \n" \
-            f"\n" \
             f"   /**\n" \
             f"     * Returns the formal name of the cellular automaton rule.\n" \
             f"     * * @return A string representing the rule name (Rule {rule}).\n" \
@@ -56,13 +55,7 @@ def build_string(rule) -> str:
             f"     */ \n" \
             f"     public int apply(int x_l, int x_c, int x_r){{ \n" \
             f"        return 0; \n" \
-            f"     }} \n" \
-            f"\n" \
-            f"  /**\n" \
-            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
-            f"   * * @return K value of rule 90. \n" \
-            f"   */ \n" \
-            f"   public double getK(){{ return 0.0; }}\n" \
+            f"     }} \n\n" \
             f"  /**\n" \
             f"   * Returns Binary value of rule as string.\n" \
             f"   * * @return binary value of rule. \n" \

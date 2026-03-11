@@ -1,8 +1,8 @@
 package br.ufrrj.dcc.ca.models.one;
 /**
-* Implementation of Wolfram's Elementary Cellular Automaton Rule 210.
+* Implementation of Wolfram's Elementary Cellular Automaton Rule 80.
 * <p>
-* Rule 210 is a linear elementary cellular automaton where the next state of a cell
+* Rule 80 is a linear elementary cellular automaton where the next state of a cell
 * depends on the XOR sum of its left and right neighbors. It is well-known for
 * producing complex fractal patterns, specifically the Sierpinski triangle,
 * when starting from a single active cell.
@@ -11,17 +11,18 @@ package br.ufrrj.dcc.ca.models.one;
 * * @author Marcelo
 * @version 1.0
 */
-public class Rule_210 implements ElementaryRuleInterface { 
+public class Rule_080 implements ElementaryRuleInterface { 
+
    /**
      * Returns the formal name of the cellular automaton rule.
-     * * @return A string representing the rule name (Rule 210).
+     * * @return A string representing the rule name (Rule 80).
      */ 
-     public String getRuleName() {return "Rule 210 "; } 
+     public String getRuleName() {return "Rule 80 "; } 
 
    /** 
      * Applies the transition rule to determine the next state of a cell. 
      * <p> 
-     * In Rule 210, the center cell's current state is ignored. The result depends  
+     * In Rule 80, the center cell's current state is ignored. The result depends  
      * exclusively on the states of the neighbors. 
      * </p> 
      * * @param x_l The state of the left neighbor. 
@@ -34,18 +35,23 @@ public class Rule_210 implements ElementaryRuleInterface {
      } 
 
   /**
+   * Returns K value or the quantity of neighbors (cells) that influence the rule.
+   * * @return K value of rule 90. 
+   */ 
+   public double getK(){ return 0.0; }
+  /**
    * Returns Binary value of rule as string.
    * * @return binary value of rule. 
    */ 
-   public String getBinary(){ return "11010010"; }
+   public String getBinary(){ return "01010000"; }
   /**
    * Returns the quantity of bits 1 in the binary word.
    * * @return double value in order to avoid casting type. 
    */ 
-   public double getB1s(){ return 4; }
+   public double getB1s(){ return 2; }
   /**
    * Returns the quantity of bits 0 in the binary word.
    * * @return double value in order to avoid casting type. 
    */ 
-   public double getB0s(){ return 4; }
+   public double getB0s(){ return 6; }
 }

@@ -12,7 +12,6 @@ package br.ufrrj.dcc.ca.models.one;
 * @version 1.0
 */
 public class Rule_150 implements ElementaryRuleInterface { 
-
    /**
      * Returns the formal name of the cellular automaton rule.
      * * @return A string representing the rule name (Rule 150).
@@ -31,14 +30,13 @@ public class Rule_150 implements ElementaryRuleInterface {
      * @return The new state of the cell (0 or 1). 
      */ 
      public int apply(int x_l, int x_c, int x_r){ 
-        return 0; 
+         int a = x_l & (~x_c)  & (~x_r);
+         int b = (~x_l) & x_c & (~x_r);
+         int c = (~x_l) & (~x_c) & x_r;
+         int d = x_l & x_c &  x_r;
+         return a | b | c | d;
      } 
 
-  /**
-   * Returns K value or the quantity of neighbors (cells) that influence the rule.
-   * * @return K value of rule 90. 
-   */ 
-   public double getK(){ return 0.0; }
   /**
    * Returns Binary value of rule as string.
    * * @return binary value of rule. 

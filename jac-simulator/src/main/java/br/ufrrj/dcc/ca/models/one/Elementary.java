@@ -7,8 +7,11 @@ import javax.swing.JProgressBar;
 import br.ufrrj.dcc.ca.Internal1DCA;
 
 public class Elementary extends Thread{
-    private int mRule       = 90;
-    private int[][] mMatrix = null;
+    
+    private final double []TABLE_K  = {3.0, 2.0, 2.0, 1.0, 2.0, 1.0, 1.0, 0.0}; 
+ 
+    private int      mRule     = 90;
+    private int[][]  mMatrix = null;
     private double[] mDensity = null;
     private double[] mEntropy = null;
     private double[] mLambda_L = null;
@@ -48,12 +51,22 @@ public class Elementary extends Thread{
     }//public Elementary(int rule, int[] t0, String boundary, int timesteps){
 
     public void setWhiteNoise(double p, boolean rand){
-        double k = mRule_func.getK();
-        if (rand)
-            mDensity[0] = Math.pow(p, k) * Math.pow((1.0 - p), 3.0-k);
-        else
-            mDensity[0] = 0.0;
-    }
+        
+        if (!rand){
+            mDensity[0] = 0.0f; 
+            return;
+        }
+        mDensity[0] = 0.0;
+        String binaryword = mRule_func.getBinary();
+        for (int i = 0; i < binaryword.length(); i++){
+            if (binaryword.charAt(i) == '1'){
+                double k = TABLE_K[i];
+                mDensity[0] += (Math.pow(p, k) * Math.pow(1.0-p, 3.0-k)); 
+
+            }
+        }//for (int i = 0; i < binaryword.length(); i++){
+        
+    }//public void setWhiteNoise(double p, boolean rand){
 
     public synchronized void setIsRunningTrue() {mIsRunning = true;}
     public synchronized void setIsRunningFalse() {mIsRunning = false;}
@@ -140,20 +153,45 @@ public class Elementary extends Thread{
     
     }//public void apply(){
 
+    
     private void setStatistic(int t){
-        if (t == 1){
+        double prob1 = 0.0, prob0 = 0.0, n = (double) mX_len;
+        for (int i = 0; i < mX_len; i++){
+            if (mMatrix[t][i] == 1) prob1++;
+            if (mMatrix[t][i] == 0) prob0++;
+        }
+        double a = prob1 / n;
+        double b = prob0 / n;
+        double c =  Math.log(2.0);
+        mEntropy[t]  = ((Math.log(a) / c) * a);
+        mEntropy[t] += ((Math.log(b) / c) * b);
+        mEntropy[t] *= -1.0;
 
+
+
+        if (t == 1){
+            mDensity[t] = mRule_func.getB1s() / 8.0;
             return;
         }
+        
+        mDensity[t] = prob1 / n;
 
     }
     public String getInfo(){
         if (mRule_func == null) return "NO RULE";
-        String info = new String(mRule_func.getRuleName() + "\n");
-        info += "          Mesh length: " + Integer.toString(mX_len) + "\n";
-        info += "            Timesteps: " + Integer.toString(mTimestep) + "\n";
-        info += " Boundaries condition:"  + mBoundary + "\n";
-
+        String info = new String("# " + mRule_func.getRuleName() + "\n");
+        info += "#          Mesh length: " + Integer.toString(mX_len) + "\n";
+        info += "#            Timesteps: " + Integer.toString(mTimestep) + "\n";
+        info += "# Boundaries condition:"  + mBoundary + "\n";
+        info += "#-------------------------------------------------------------------------------\n";
+        info += "density;entropy;lambdaL;lambdaR\n";
+        for (int i = 0; i < mTimestep; i++){
+            info += String.format("%.10f;%.10f;%.10f;%.10f\n", 
+            mDensity[i], 
+            mEntropy[i], 
+            mLambda_L[i], 
+            mLambda_R[i]);
+        }
         return info;
     }
 

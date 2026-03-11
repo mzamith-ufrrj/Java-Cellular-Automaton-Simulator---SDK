@@ -12,7 +12,6 @@ package br.ufrrj.dcc.ca.models.one;
 * @version 1.0
 */
 public class Rule_000 implements ElementaryRuleInterface { 
-
    /**
      * Returns the formal name of the cellular automaton rule.
      * * @return A string representing the rule name (Rule 0).
@@ -35,11 +34,6 @@ public class Rule_000 implements ElementaryRuleInterface {
      } 
 
   /**
-   * Returns K value or the quantity of neighbors (cells) that influence the rule.
-   * * @return K value of rule 90. 
-   */ 
-   public double getK(){ return 0.0; }
-  /**
    * Returns Binary value of rule as string.
    * * @return binary value of rule. 
    */ 
@@ -54,4 +48,5 @@ public class Rule_000 implements ElementaryRuleInterface {
    * * @return double value in order to avoid casting type. 
    */ 
    public double getB0s(){ return 8; }
+ 
 }
