@@ -31,10 +31,27 @@ public class Rule_110 implements ElementaryRuleInterface {
      * @return The new state of the cell (0 or 1). 
      */ 
      public int apply(int x_l, int x_c, int x_r){ 
-        int a = (~x_l) & x_c;
-        int b =  x_c & (~x_r); 
-        int c = (~x_c) & x_r;
-        return a | b | c; 
-        
+        return 0; 
      } 
+
+  /**
+   * Returns K value or the quantity of neighbors (cells) that influence the rule.
+   * * @return K value of rule 90. 
+   */ 
+   public double getK(){ return 0.0; }
+  /**
+   * Returns Binary value of rule as string.
+   * * @return binary value of rule. 
+   */ 
+   public String getBinary(){ return "01101110"; }
+  /**
+   * Returns the quantity of bits 1 in the binary word.
+   * * @return double value in order to avoid casting type. 
+   */ 
+   public double getB1s(){ return 5; }
+  /**
+   * Returns the quantity of bits 0 in the binary word.
+   * * @return double value in order to avoid casting type. 
+   */ 
+   public double getB0s(){ return 3; }
 }

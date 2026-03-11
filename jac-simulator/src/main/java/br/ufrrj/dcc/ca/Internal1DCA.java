@@ -153,6 +153,8 @@ public class Internal1DCA extends JInternalFrame{
 
     private void run(){
         int[] t0;
+        
+
         if (mIsRand){
             t0 = new int[mCALen];
             for (int i = 0; i < mCALen; i++){
@@ -160,6 +162,8 @@ public class Internal1DCA extends JInternalFrame{
                 if (p < mProb)
                     t0[i] = 1;
             }
+            mCA.setWhiteNoise(mProb, true);
+
         }else{
             //It is from file, read file text data to array
             if (mInitialConditionString.compareTo("") == 0) return;
@@ -170,6 +174,8 @@ public class Internal1DCA extends JInternalFrame{
                 if ((c >= 0x30) && (c <= 0x39))
                     t0[i] = c & 0x0F;
             }
+
+            mCA.setWhiteNoise(0.0f, false);
         }
         
         if (mCA != null) {

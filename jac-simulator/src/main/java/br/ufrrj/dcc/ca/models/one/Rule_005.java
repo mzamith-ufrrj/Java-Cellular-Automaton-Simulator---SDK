@@ -31,6 +31,27 @@ public class Rule_005 implements ElementaryRuleInterface {
      * @return The new state of the cell (0 or 1). 
      */ 
      public int apply(int x_l, int x_c, int x_r){ 
-        return (~x_l) & (~x_r); 
+        return 0; 
      } 
+
+  /**
+   * Returns K value or the quantity of neighbors (cells) that influence the rule.
+   * * @return K value of rule 90. 
+   */ 
+   public double getK(){ return 0.0; }
+  /**
+   * Returns Binary value of rule as string.
+   * * @return binary value of rule. 
+   */ 
+   public String getBinary(){ return "00000101"; }
+  /**
+   * Returns the quantity of bits 1 in the binary word.
+   * * @return double value in order to avoid casting type. 
+   */ 
+   public double getB1s(){ return 2; }
+  /**
+   * Returns the quantity of bits 0 in the binary word.
+   * * @return double value in order to avoid casting type. 
+   */ 
+   public double getB0s(){ return 6; }
 }
