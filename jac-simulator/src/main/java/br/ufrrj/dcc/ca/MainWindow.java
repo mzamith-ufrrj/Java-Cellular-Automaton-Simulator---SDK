@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -47,6 +48,8 @@ public class MainWindow  extends JFrame {
 		private static final int ELEMENTARY_CA     		= 2;
 		private static final int GOL_RAND               = 3;
 		private static final int ITENS                  = 4;
+		private static final int OFFSET_X               = 20; 
+		private static final int OFFSET_Y               = 15; 
 		
 	
 	    private JMenuBar mMenuBar = null;
@@ -56,8 +59,11 @@ public class MainWindow  extends JFrame {
 	    
 	    private JDesktopPane mPainel =  null;
 	    private int []mMenuHash;
-		private int mNumWindow = 1;
+		
+		private int mPosX = 10;
+		private int mPosY = 10;
 		 
+		private JInternalFrame []mWindowList = null;
     	public MainWindow() {
             this.setTitle("Cellular automata simulation");
             //this.setExtendedState(JFrame.MAXIMIZED_BOTH); // To maximize a frame
@@ -138,14 +144,9 @@ public class MainWindow  extends JFrame {
     	}
     	
     	private void listWindows(){
-				JInternalFrame[] frames = mPainel.getAllFrames();
-
-				for (JInternalFrame frame : frames) {
+			mWindowList = mPainel.getAllFrames();
+			
 				
-					String titulo = frame.getTitle();
-					System.out.println("Window: " + titulo);
-					
-				}
 		}
     	/*
     	 * Class listens menu click event
@@ -158,7 +159,14 @@ public class MainWindow  extends JFrame {
 				if (e.getSource().hashCode() ==  mMenuHash[ELEMENTARY_CA]){
 					System.out.println("CALL Elememtary CA");
 					Internal1DCA elementary = new Internal1DCA(mPainel);
+					elementary.setLocation(mPosX, mPosY);
+					mPosX += OFFSET_X;
+					mPosY += OFFSET_Y;
 					mPainel.add(elementary);
+					 
+					try {elementary.setSelected(true);}
+					catch (PropertyVetoException error) {error.printStackTrace();}
+					 
 					listWindows();
 					return;
 				}
@@ -168,7 +176,15 @@ public class MainWindow  extends JFrame {
 					Internal2DCASIM g_gol = new Internal2DCASIM("Game of Life - rand mode");
 					g_gol.setCAModel(l_gol);
 					g_gol.init_window(mPainel);
-					mPainel.add(g_gol);
+					g_gol.setLocation(mPosX, mPosY);
+					mPosX += OFFSET_X;
+					mPosY += OFFSET_Y;
+					mPainel.add(g_gol); 
+					 
+					try {g_gol.setSelected(true);}
+					catch (PropertyVetoException error) {error.printStackTrace();}
+
+					
 					listWindows();
 					return;
 				}

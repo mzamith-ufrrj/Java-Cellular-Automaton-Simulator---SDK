@@ -31,8 +31,12 @@ public class Rule_022 implements ElementaryRuleInterface {
      * @return The new state of the cell (0 or 1). 
      */ 
      public int apply(int x_l, int x_c, int x_r){ 
-        int a = x_l & (~x_c) & (~x_r);
-        int b = (~x_l) & x_c & (~x_r);
-        return a | b; 
+        return 0; 
      } 
+
+  /**
+   * Returns K value or the quantity of neighbors (cells) that influence the rule.
+   * * @return K value of rule 90. 
+   */ 
+   public double getK(){ return 0.0; }
 }

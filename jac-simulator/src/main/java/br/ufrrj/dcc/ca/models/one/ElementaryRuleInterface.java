@@ -5,4 +5,6 @@ public interface ElementaryRuleInterface {
     int apply(int x_l, int x_c, int x_r);
 
     String getRuleName();
+
+    double getK();
 }

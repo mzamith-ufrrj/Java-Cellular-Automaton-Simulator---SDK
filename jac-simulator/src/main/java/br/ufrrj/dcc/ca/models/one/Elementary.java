@@ -9,6 +9,10 @@ import br.ufrrj.dcc.ca.Internal1DCA;
 public class Elementary extends Thread{
     private int mRule       = 90;
     private int[][] mMatrix = null;
+    private double[] mDensity = null;
+    private double[] mEntropy = null;
+    private double[] mLambda_L = null;
+    private double[] mLambda_R = null;
 
     private String mBoundary   =  "periodic";
     private int mTimestep      = 100;
@@ -35,9 +39,21 @@ public class Elementary extends Thread{
             mMatrix[0][i] = t0[i];
         }
 
+        mDensity = new double[timesteps];
+        mEntropy = new double[timesteps];
+        mLambda_L = new double[timesteps];
+        mLambda_R = new double[timesteps];
+
 
     }//public Elementary(int rule, int[] t0, String boundary, int timesteps){
 
+    public void setWhiteNoise(double p, boolean rand){
+        double k = mRule_func.getK();
+        if (rand)
+            mDensity[0] = Math.pow(p, k) * Math.pow((1.0 - p), 3.0-k);
+        else
+            mDensity[0] = 0.0;
+    }
 
     public synchronized void setIsRunningTrue() {mIsRunning = true;}
     public synchronized void setIsRunningFalse() {mIsRunning = false;}
@@ -119,11 +135,18 @@ public class Elementary extends Thread{
             assert x_l != -1 || x_c != -1 || x_r != -1: "Error: Values are not defined";
 
             mMatrix[t][x] = mRule_func.apply(x_l, x_c, x_r);
-
+            setStatistic(t);
         }   
     
     }//public void apply(){
 
+    private void setStatistic(int t){
+        if (t == 1){
+
+            return;
+        }
+
+    }
     public String getInfo(){
         if (mRule_func == null) return "NO RULE";
         String info = new String(mRule_func.getRuleName() + "\n");

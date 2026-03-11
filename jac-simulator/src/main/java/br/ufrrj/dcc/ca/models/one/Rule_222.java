@@ -33,4 +33,10 @@ public class Rule_222 implements ElementaryRuleInterface {
      public int apply(int x_l, int x_c, int x_r){ 
         return 0; 
      } 
+
+  /**
+   * Returns K value or the quantity of neighbors (cells) that influence the rule.
+   * * @return K value of rule 90. 
+   */ 
+   public double getK(){ return 0.0; }
 }

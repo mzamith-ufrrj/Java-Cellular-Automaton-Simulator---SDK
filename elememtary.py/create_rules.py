@@ -1,4 +1,27 @@
+def int_para_binario_8bits(n) -> str:
+    # Garante que o número esteja no intervalo de 0-255 para 8 bits
+    if not 0 <= n <= 255:
+        return "Valor fora do intervalo de 8 bits"
+    
+    return f"{n:08b}"
+
+def getValues(value) -> [int, int]:
+    a = 0
+    b = 0
+    
+    for s in value:
+        if s == '1':
+            a = a + 1
+        elif s == '0':
+            b = b + 1
+        else:
+            sys.exit(1)
+    return a, b
+
+
 def build_string(rule) -> str:
+    binary = int_para_binario_8bits(rule)
+    b1s, b0s = getValues(binary)
     content = f"package br.ufrrj.dcc.ca.models.one;\n" \
             f"/**\n"  \
             f"* Implementation of Wolfram's Elementary Cellular Automaton Rule {rule}.\n" \
@@ -34,6 +57,27 @@ def build_string(rule) -> str:
             f"     public int apply(int x_l, int x_c, int x_r){{ \n" \
             f"        return 0; \n" \
             f"     }} \n" \
+            f"\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public double getK(){{ return 0.0; }}\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public String getBinary(){{ return {binary}; }}\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public double getB1s(){{ return {b1s}; }}\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public double getB0s){{ return {b0s}; }}\n" \
             f"}}\n"
 
     return content
@@ -61,4 +105,4 @@ def java_switch__struct():
     
 
 if __name__ == "__main__":
-    java_switch__struct()
+    java_files()
