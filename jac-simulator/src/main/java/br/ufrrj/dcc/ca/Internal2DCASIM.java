@@ -94,7 +94,11 @@ public class Internal2DCASIM extends JInternalFrame{
 		boolean ret = this.mCA.settings();
 		if (ret){
 			this.mPainel = p;
-			
+			int index = this.mPainel.getAllFrames().length + 1;
+			String title = this.getTitle();
+			this.setTitle(title + " W(" + Integer.toString(index) + ")");
+
+
 			createMenu(); 
 			
 			this.getContentPane().add(createLayer(), BorderLayout.LINE_START);

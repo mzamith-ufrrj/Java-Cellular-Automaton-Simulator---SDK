@@ -20,6 +20,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -55,9 +56,8 @@ public class MainWindow  extends JFrame {
 	    
 	    private JDesktopPane mPainel =  null;
 	    private int []mMenuHash;
-		
-		
-	    
+		private int mNumWindow = 1;
+		 
     	public MainWindow() {
             this.setTitle("Cellular automata simulation");
             //this.setExtendedState(JFrame.MAXIMIZED_BOTH); // To maximize a frame
@@ -96,6 +96,8 @@ public class MainWindow  extends JFrame {
             this.createMenu();
             this.setVisible(true);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			 
 		}//public MainWIndow() {
     	
 
@@ -135,7 +137,16 @@ public class MainWindow  extends JFrame {
             this.setJMenuBar(mMenuBar);
     	}
     	
-    	
+    	private void listWindows(){
+				JInternalFrame[] frames = mPainel.getAllFrames();
+
+				for (JInternalFrame frame : frames) {
+				
+					String titulo = frame.getTitle();
+					System.out.println("Window: " + titulo);
+					
+				}
+		}
     	/*
     	 * Class listens menu click event
     	 */
@@ -148,6 +159,7 @@ public class MainWindow  extends JFrame {
 					System.out.println("CALL Elememtary CA");
 					Internal1DCA elementary = new Internal1DCA(mPainel);
 					mPainel.add(elementary);
+					listWindows();
 					return;
 				}
 				
@@ -157,6 +169,7 @@ public class MainWindow  extends JFrame {
 					g_gol.setCAModel(l_gol);
 					g_gol.init_window(mPainel);
 					mPainel.add(g_gol);
+					listWindows();
 					return;
 				}
 				
@@ -176,3 +189,13 @@ public class MainWindow  extends JFrame {
 
         }//end- private class MenuEvent implements ActionListener{	
 }//public class MainWIndow  extends JFrame {
+
+
+/*
+
+if (frames[i] instanceof Internal2DCASIM) {
+    Internal2DCASIM minhaJanela = (Internal2DCASIM) frames[i];
+    // agora você tem acesso aos métodos da sua classe customizada
+}
+
+*/

@@ -89,7 +89,7 @@ public class Internal1DCA extends JInternalFrame{
 
         
         this.getContentPane().add(panel);
-        this.setTitle(TITLE + Integer.toString(mRule));
+        this.setTitle(TITLE + Integer.toString(mRule) + " W(" + Integer.toString(mGui1DCA.getDesktopPane().getAllFrames().length + 1) + ")");
 		closeFrameEvent();
     }
 
@@ -276,7 +276,8 @@ public class Internal1DCA extends JInternalFrame{
             int result = JOptionPane.showConfirmDialog(null, inputs, "CA rule", JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 mRule = (Integer) spinner.getValue();
-                this.setTitle(TITLE + Integer.toString(mRule));
+                //this.setTitle(TITLE + Integer.toString(mRule));
+                this.setTitle(TITLE + Integer.toString(mRule) + " W(" + Integer.toString(mGui1DCA.getDesktopPane().getAllFrames().length) + ")");
             }
     }
     private void setTimestep(){

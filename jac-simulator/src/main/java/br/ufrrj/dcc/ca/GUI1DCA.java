@@ -44,6 +44,8 @@ public class GUI1DCA extends JPanel{
 
 	public void setDesktopPane(JDesktopPane p) { this.mPainel = p ;}
 
+	public JDesktopPane getDesktopPane() { return this.mPainel; }
+
 	private void printMesh() {
 		if (mElementaryCA == null) return;
 

@@ -40,6 +40,7 @@ public class GUI2DCA extends JPanel{
 	
 	private final Color COLOR[] = new Color[256];
 	
+	
 	public void setCellularAutomataModel(LogicSimpleCA2D ca) {
 		mCA = ca;
 		if (mCA != null)
