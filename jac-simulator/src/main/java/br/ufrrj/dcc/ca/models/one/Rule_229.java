@@ -39,6 +39,7 @@ public class Rule_229 implements ElementaryRuleInterface {
    * * @return K value of rule 90. 
    */ 
    public double getK(){ return 0.0; }
+<<<<<<< HEAD
   /**
    * Returns Binary value of rule as string.
    * * @return binary value of rule. 
@@ -54,4 +55,6 @@ public class Rule_229 implements ElementaryRuleInterface {
    * * @return double value in order to avoid casting type. 
    */ 
    public double getB0s(){ return 3; }
+=======
+>>>>>>> origin/main
 }

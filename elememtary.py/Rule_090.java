@@ -1,8 +1,8 @@
 package br.ufrrj.dcc.ca.models.one;
 /**
-* Implementation of Wolfram's Elementary Cellular Automaton Rule 188.
+* Implementation of Wolfram's Elementary Cellular Automaton Rule 90.
 * <p>
-* Rule 188 is a linear elementary cellular automaton where the next state of a cell
+* Rule 90 is a linear elementary cellular automaton where the next state of a cell
 * depends on the XOR sum of its left and right neighbors. It is well-known for
 * producing complex fractal patterns, specifically the Sierpinski triangle,
 * when starting from a single active cell.
@@ -11,18 +11,18 @@ package br.ufrrj.dcc.ca.models.one;
 * * @author Marcelo
 * @version 1.0
 */
-public class Rule_188 implements ElementaryRuleInterface { 
+public class Rule_090 implements ElementaryRuleInterface { 
 
    /**
      * Returns the formal name of the cellular automaton rule.
-     * * @return A string representing the rule name (Rule 188).
+     * * @return A string representing the rule name (Rule 90).
      */ 
-     public String getRuleName() {return "Rule 188 "; } 
+     public String getRuleName() {return "Rule 90 "; } 
 
    /** 
      * Applies the transition rule to determine the next state of a cell. 
      * <p> 
-     * In Rule 188, the center cell's current state is ignored. The result depends  
+     * In Rule 90, the center cell's current state is ignored. The result depends  
      * exclusively on the states of the neighbors. 
      * </p> 
      * * @param x_l The state of the left neighbor. 
@@ -39,22 +39,4 @@ public class Rule_188 implements ElementaryRuleInterface {
    * * @return K value of rule 90. 
    */ 
    public double getK(){ return 0.0; }
-<<<<<<< HEAD
-  /**
-   * Returns Binary value of rule as string.
-   * * @return binary value of rule. 
-   */ 
-   public String getBinary(){ return "10111100"; }
-  /**
-   * Returns the quantity of bits 1 in the binary word.
-   * * @return double value in order to avoid casting type. 
-   */ 
-   public double getB1s(){ return 5; }
-  /**
-   * Returns the quantity of bits 0 in the binary word.
-   * * @return double value in order to avoid casting type. 
-   */ 
-   public double getB0s(){ return 3; }
-=======
->>>>>>> origin/main
 }

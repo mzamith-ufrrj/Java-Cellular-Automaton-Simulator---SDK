@@ -64,6 +64,7 @@ def build_string(rule) -> str:
             f"   */ \n" \
             f"   public double getK(){{ return 0.0; }}\n" \
             f"  /**\n" \
+<<<<<<< HEAD
             f"   * Returns Binary value of rule as string.\n" \
             f"   * * @return binary value of rule. \n" \
             f"   */ \n" \
@@ -78,6 +79,22 @@ def build_string(rule) -> str:
             f"   * * @return double value in order to avoid casting type. \n" \
             f"   */ \n" \
             f"   public double getB0s(){{ return {b0s}; }}\n" \
+=======
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public String getBinary(){{ return {binary}; }}\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public double getB1s(){{ return {b1s}; }}\n" \
+            f"  /**\n" \
+            f"   * Returns K value or the quantity of neighbors (cells) that influence the rule.\n" \
+            f"   * * @return K value of rule 90. \n" \
+            f"   */ \n" \
+            f"   public double getB0s){{ return {b0s}; }}\n" \
+>>>>>>> origin/main
             f"}}\n"
 
     return content

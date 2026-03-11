@@ -34,6 +34,7 @@ public class Rule_090 implements ElementaryRuleInterface {
         return (x_l & (~x_r)) |  (( ~x_l) & x_r);
      }
 
+<<<<<<< HEAD
   /**
    * Returns K value or the quantity of neighbors (cells) that influence the rule.
    * * @return K value of rule 90. 
@@ -54,4 +55,11 @@ public class Rule_090 implements ElementaryRuleInterface {
    * * @return double value in order to avoid casting type. 
    */ 
    public double getB0s(){ return 4; }
+=======
+    /**
+     * Returns K value or the quantity of neighbors (cells) that influence the rule.
+     * * @return K value of rule 90.
+     */
+     public double getK(){ return 2.0; }
+>>>>>>> origin/main
 }
