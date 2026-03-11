@@ -30,16 +30,15 @@ public class Rule_090 implements ElementaryRuleInterface {
      * @param x_r The state of the right neighbor. 
      * @return The new state of the cell (0 or 1). 
      */ 
-     public int apply(int x_l, int x_c, int x_r){
-        return (x_l & (~x_r)) |  (( ~x_l) & x_r);
-     }
+     public int apply(int x_l, int x_c, int x_r){ 
+        return 0; 
+     } 
 
-<<<<<<< HEAD
   /**
    * Returns K value or the quantity of neighbors (cells) that influence the rule.
    * * @return K value of rule 90. 
    */ 
-   public double getK(){ return 0.0; }
+   public double getK(){ return 2.0; }
   /**
    * Returns Binary value of rule as string.
    * * @return binary value of rule. 
@@ -55,11 +54,4 @@ public class Rule_090 implements ElementaryRuleInterface {
    * * @return double value in order to avoid casting type. 
    */ 
    public double getB0s(){ return 4; }
-=======
-    /**
-     * Returns K value or the quantity of neighbors (cells) that influence the rule.
-     * * @return K value of rule 90.
-     */
-     public double getK(){ return 2.0; }
->>>>>>> origin/main
 }
