@@ -21,7 +21,7 @@ public class Elementary extends Thread{
     private int mTimestep      = 100;
     private int mX_len         = 100;
     private boolean mIsRunning = false;
-    private ElementaryRuleInterface mRule_func = null;
+    private TheRule mRule_func = null;
     private Internal1DCA mInternal1DCA         = null;
 
 
@@ -35,7 +35,7 @@ public class Elementary extends Thread{
         mTimestep = timesteps;
         mX_len = t0.length;
         mBoundary = new String(boundary);
-        mRule_func = setRule();
+        mRule_func = new TheRule(mRule);
         mMatrix = new int[timesteps][mX_len];
         
         for (int i = 0; i < mX_len; i++){
@@ -196,7 +196,9 @@ public class Elementary extends Thread{
     }
 
     public int getStateCell(int x, int t){ return mMatrix[t][x]; }
-    
+  
+
+    /*
     private ElementaryRuleInterface setRule(){
         ElementaryRuleInterface rule = null;
         switch (mRule) {
@@ -459,4 +461,5 @@ public class Elementary extends Thread{
         } 
         return rule;
     }//private ElementaryRuleInterface setRule()
+     */
 }
