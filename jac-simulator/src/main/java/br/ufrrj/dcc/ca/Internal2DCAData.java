@@ -21,7 +21,7 @@ public class Internal2DCAData extends JInternalFrame{
 	private JTextArea mLog = null;
 	 
 	
-	public Internal2DCAData(String layertitle) {
+	public Internal2DCAData(String layertitle, int x, int y) {
 		super(layertitle, true, true, true, false);
 		 
 		mLog = new JTextArea ();
@@ -47,7 +47,7 @@ public class Internal2DCAData extends JInternalFrame{
 		this.add(ta);
 		*/
 		
-		this.setLocation(35, 35);
+		this.setLocation(x, y);
 		this.setSize(800, 600);
 		this.setVisible(true);
 		this.show();
@@ -70,7 +70,9 @@ public class Internal2DCAData extends JInternalFrame{
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						JFileChooser fileChooser = new JFileChooser();
+						String currentDir = System.getProperty("user.dir");
+        				JFileChooser fileChooser = new JFileChooser(currentDir);
+						
         				fileChooser.setDialogTitle("Export to CSV format");
 						FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files (*.csv)", "CSV");
         				fileChooser.setFileFilter(filter);

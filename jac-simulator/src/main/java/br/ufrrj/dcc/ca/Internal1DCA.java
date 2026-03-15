@@ -1,10 +1,16 @@
 package br.ufrrj.dcc.ca;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.text.NumberFormat;
-import java.awt.Color;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -12,7 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,13 +30,10 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.MenuEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.NumberFormatter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import org.ini4j.Wini;
+
 
 import br.ufrrj.dcc.ca.models.one.Elementary;
 
@@ -43,8 +45,9 @@ public class Internal1DCA extends JInternalFrame{
     private JMenuItem mMenuItem = null;
     private JMenu     mMenu     = null;
 
-    private static final int ITENS  		= 6;
-
+    private static final int ITENS  		= 8;
+    private static final int FRACTAL_D      = 7;
+    private static final int EXPORT_INIT    = 6;
     private static final int RUN            = 5;
     private static final int RULE 			= 4;
     private static final int RAND_INIT 		= 0;
@@ -78,7 +81,7 @@ public class Internal1DCA extends JInternalFrame{
 		createMenu(); 
 
         JPanel panel = new JPanel();
-        mGui1DCA = new GUI1DCA();
+        mGui1DCA = new GUI1DCA(this);
         mGui1DCA.setDesktopPane(p);
         panel.add(mGui1DCA);
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -91,6 +94,7 @@ public class Internal1DCA extends JInternalFrame{
         this.getContentPane().add(panel);
         this.setTitle(TITLE + Integer.toString(mRule) + " W(" + Integer.toString(mGui1DCA.getDesktopPane().getAllFrames().length + 1) + ")");
 		closeFrameEvent();
+        randomInitStateDefault();
     }
 
 
@@ -118,10 +122,10 @@ public class Internal1DCA extends JInternalFrame{
         mMenu.add(mMenuItem);
         this.setJMenuBar(mMenuBar);// index = 3
 
-        mMenuItem = new JMenuItem("Initial state from file");
+        mMenuItem = new JMenuItem("Boundaries condition");
         mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
         mMenuItem.addActionListener(menuEvent);
-        mMenuHash[FILE_INIT] = mMenuItem.hashCode();
+        mMenuHash[BOUNDARIRES] = mMenuItem.hashCode();
         mMenu.add(mMenuItem);
         this.setJMenuBar(mMenuBar);// index = 3
 
@@ -133,51 +137,69 @@ public class Internal1DCA extends JInternalFrame{
         this.setJMenuBar(mMenuBar);// index = 3
 
 
-        mMenuItem = new JMenuItem("Boundaries condition");
-        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
-        mMenuItem.addActionListener(menuEvent);
-        mMenuHash[BOUNDARIRES] = mMenuItem.hashCode();
-        mMenu.add(mMenuItem);
-        this.setJMenuBar(mMenuBar);// index = 3
+
 
         mMenuItem = new JMenuItem("Timesteps");
-        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
         mMenuItem.addActionListener(menuEvent);
         mMenuHash[TIME_STEPS] = mMenuItem.hashCode();
         mMenu.add(mMenuItem);
         this.setJMenuBar(mMenuBar);
+      
+        mMenuItem = new JMenuItem("Load initial state from file");
+        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+        mMenuItem.addActionListener(menuEvent);
+        mMenuHash[FILE_INIT] = mMenuItem.hashCode();
+        mMenu.add(mMenuItem);
+        this.setJMenuBar(mMenuBar);// index = 3
 
+        mMenuItem = new JMenuItem("Save initial condition to file");
+        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+        mMenuItem.addActionListener(menuEvent);
+        mMenuHash[EXPORT_INIT] = mMenuItem.hashCode();
+        mMenu.add(mMenuItem);
+        this.setJMenuBar(mMenuBar);
+     
+        mMenuItem = new JMenuItem("Calculate the fractal dimension");
+        mMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
+        mMenuItem.addActionListener(menuEvent);
+        mMenuHash[FRACTAL_D] = mMenuItem.hashCode();
+        mMenu.add(mMenuItem);
+        this.setJMenuBar(mMenuBar);
      
 //--------------------------------------------------------------------------------------------------
 	}
-
+    
+    private void calcFractalDimension(){
+        int steps = 128;
+        int []t0 = new int[steps*2];
+        t0[steps] = 1;
+        mCA = new Elementary(this, mRule, t0, "constant [0]", steps);
+        this.mGui1DCA.setElementaryCA(mCA);
+        mCA.setFractalDimension();
+        mCA.start();
+        //110 rule
+        /*
+        int steps = 256;
+        int []t0 = new int[steps*2];
+        t0[steps*2-2] = 1;
+        mCA = new Elementary(this, mRule, t0, "constant [0]", steps);
+        this.mGui1DCA.setElementaryCA(mCA);
+        mCA.setFractalDimension();
+        mCA.start();
+         */
+        
+    }
     private void run(){
         int[] t0;
-        
-
-        if (mIsRand){
-            t0 = new int[mCALen];
-            for (int i = 0; i < mCALen; i++){
-                double p = Math.random();
-                if (p < mProb)
-                    t0[i] = 1;
-            }
-             
-
-        }else{
-            //It is from file, read file text data to array
-            if (mInitialConditionString.compareTo("") == 0) return;
-            mCALen = mInitialConditionString.length();
-            t0 = new int[mCALen];
-            for (int i = 0; i < mCALen; i++){
-                char c = mInitialConditionString.charAt(i);
-                if ((c >= 0x30) && (c <= 0x39))
-                    t0[i] = c & 0x0F;
-            }
-
-             
+    
+        mCALen = mInitialConditionString.length();
+        t0 = new int[mCALen];
+        for (int i = 0; i < mCALen; i++){
+            char c = mInitialConditionString.charAt(i);
+            if ((c >= 0x30) && (c <= 0x39))
+                t0[i] = c & 0x0F;
         }
-        
         if (mCA != null) {
     		boolean ret =  mCA.isAlive();
     		mCA.setIsRunningFalse();
@@ -209,14 +231,52 @@ public class Internal1DCA extends JInternalFrame{
         this.mGui1DCA.repaint();
        
     }
+
+    private void randomInitStateDefault(){
+        
+
+        mInitialConditionString = new String("");
+        for (int i = 0; i < mCALen; i++){
+            double p = Math.random();
+            if (p <= mProb)
+                mInitialConditionString += "1";
+            else
+                mInitialConditionString += "0";
+        }
+
+    }
+    private void saveInitState(){
+        File defaultFile = new File(mFileName);
+        String currentDir = System.getProperty("user.dir");
+        JFileChooser fileChooser = new JFileChooser(currentDir);
+        fileChooser.setSelectedFile(defaultFile);
+        fileChooser.setDialogTitle("Type a text file with initial condition");
+        int userSelection = fileChooser.showSaveDialog(mPtr);
+        String fullPath	= "";
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            fullPath = fileToSave.getAbsolutePath();
+            
+            System.out.println("Saving at: " + fullPath);
+        }
+        if (userSelection != JFileChooser.APPROVE_OPTION) return;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath))) {
+            writer.write(mInitialConditionString);
+            writer.newLine(); // Adiciona uma quebra de linha correta para o SO
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+							
+    }
+
     private void loadInitState(){
         File defaultFile = new File(mFileName);
-
-        JFileChooser fileChooser = new JFileChooser();
+        String currentDir = System.getProperty("user.dir");
+        JFileChooser fileChooser = new JFileChooser(currentDir);
         fileChooser.setSelectedFile(defaultFile);
         fileChooser.setDialogTitle("Select a text file with initial condition");
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files (*.txt)", "txt");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("ini File (*.ini)", "ini");
         fileChooser.setFileFilter(filter);
         fileChooser.setAcceptAllFileFilterUsed(false);
         
@@ -226,8 +286,32 @@ public class Internal1DCA extends JInternalFrame{
             String filePath = selectedFile.getAbsolutePath();
             System.out.println("File selected: " + filePath);
             mFileName = new String(filePath);
+            try {
+                Wini ini = new Wini(new File(mFileName));
+            
+            
+                String type = ini.get("ca", "type");
+                String prob = ini.get("ca", "prob");
+                mInitialConditionString = ini.get("ca", "ic");
+                mBoundary = ini.get("ca", "boundaries");
+                String steps = ini.get("ca", "timesteps");
+                mTimestep = Integer.parseInt(steps);
+                if (type.compareTo("elementary") != 0){
+                    JOptionPane.showMessageDialog(mPtr, "The CA is not elementary automata",                   
+                    "Error to load initial condition file", JOptionPane.ERROR_MESSAGE);
+                }
+                mProb = Double.parseDouble(prob);
+                if (mProb > 0.0f)mIsRand = true;
+                else{
+                    mIsRand = false;
+                    mProb = 0.0f;
+                }
+                    
 
+            
+            } catch (Exception e) { e.printStackTrace(); } 
         
+/*
             try {
                 Path path = Paths.get(mFileName);
                 mInitialConditionString = Files.readString(path);
@@ -236,7 +320,7 @@ public class Internal1DCA extends JInternalFrame{
                 // Handle the exception (e.g., file not found)
                 e.printStackTrace();
             }
-
+ */
         } else if (result == JFileChooser.CANCEL_OPTION) {
             System.out.println("User cancelled the operation.");
         }
@@ -279,6 +363,9 @@ public class Internal1DCA extends JInternalFrame{
             mCALen = (Integer) spinnerLen.getValue();
             mProb = (Double) spinnerProb.getValue();
         }
+
+        randomInitStateDefault();
+        
     }
 
     private void setRule(){
@@ -319,13 +406,14 @@ public class Internal1DCA extends JInternalFrame{
 
             //-----------------------------------------------
             switch(option){
+                case FRACTAL_D:calcFractalDimension();break;
                 case RAND_INIT:setRandom();break;
                 case FILE_INIT:loadInitState();break;
                 case BOUNDARIRES:setBoundaries(); break;
                 case TIME_STEPS:setTimestep();break;
                 case RULE:setRule();break;
                 case RUN:run();break;
-                 
+                case EXPORT_INIT: saveInitState();break;
             }
 
         }//end-public void actionPerformed(ActionEvent e) {

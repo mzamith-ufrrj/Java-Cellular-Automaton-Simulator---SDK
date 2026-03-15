@@ -191,7 +191,7 @@ public class Internal2DCASIM extends JInternalFrame{
 	                    public void actionPerformed(ActionEvent e) {
 							String text = mLayerList.getModel().getElementAt(mLayerList.getSelectedIndex());
 							System.out.println("Your option was: " + Integer.toString(mLayerList.getSelectedIndex()) + " -> value: " + text);
-							Internal2DCAData swd = new Internal2DCAData(text);
+							Internal2DCAData swd = new Internal2DCAData(text, mPtr.getX()+30, mPtr.getY()+30);
 							mPainel.add(swd);
 	                    	swd.toFront();
 							text = new String(mCA.getLogBasedOnLayer(text));

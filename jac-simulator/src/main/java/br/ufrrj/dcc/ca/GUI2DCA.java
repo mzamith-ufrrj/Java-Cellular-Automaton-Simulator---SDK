@@ -183,7 +183,8 @@ public class GUI2DCA extends JPanel{
 	                
 	                item.addActionListener(new ActionListener() {
 	                    public void actionPerformed(ActionEvent e) {
-							JFileChooser fileChooser = new JFileChooser();
+							String currentDir = System.getProperty("user.dir");
+        					JFileChooser fileChooser = new JFileChooser(currentDir);
 							fileChooser.setDialogTitle("Save As PNG - CA current state");
 							FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens PNG (*.png)", "png");
 							fileChooser.setFileFilter(filter);

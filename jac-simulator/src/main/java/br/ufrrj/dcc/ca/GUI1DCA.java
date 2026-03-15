@@ -36,7 +36,7 @@ public class GUI1DCA extends JPanel{
     private GUI1DCA mPtr = null;
 	private Elementary mElementaryCA = null;
 	private JDesktopPane mPainel =  null;
-
+	private Internal1DCA mRootWin = null;
 	public void setElementaryCA(Elementary ca){
 		mElementaryCA = ca;
 		printMesh();
@@ -56,9 +56,10 @@ public class GUI1DCA extends JPanel{
 		repaint();
 		repaint();
 	}//public void loadMesh() {
-    public GUI1DCA(){
+    public GUI1DCA(Internal1DCA rootwin){
         super();
         mPtr = this;
+		mRootWin = rootwin;
         mWidth = 1020.0f;  mHeight = 700.0f;
         setPreferredSize(new Dimension((int)mWidth, (int)mHeight));
 		setBackground(Color.BLACK);
@@ -103,7 +104,8 @@ public class GUI1DCA extends JPanel{
 				JMenuItem item = new JMenuItem("Export png");
 				item.addActionListener(new ActionListener() {
 	                    public void actionPerformed(ActionEvent e) {
-							JFileChooser fileChooser = new JFileChooser();
+							String currentDir = System.getProperty("user.dir");
+        					JFileChooser fileChooser = new JFileChooser(currentDir);
 							fileChooser.setDialogTitle("Save As PNG - CA current state");
 							FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens PNG (*.png)", "png");
 							fileChooser.setFileFilter(filter);
@@ -114,7 +116,7 @@ public class GUI1DCA extends JPanel{
 								File fileToSave = fileChooser.getSelectedFile();
 								fullPath = fileToSave.getAbsolutePath();
 								
-								System.out.println("Salvando em: " + fullPath);
+								System.out.println("Saving at: " + fullPath);
 							}
 							
 							if ((mElementaryCA == null) || (userSelection != JFileChooser.APPROVE_OPTION)) return;
@@ -149,7 +151,7 @@ public class GUI1DCA extends JPanel{
 	                    public void actionPerformed(ActionEvent e) {
 							if (mElementaryCA == null) return;
 							String text = "Elementary Cellular Automata information - " + mElementaryCA.getRuleName() ;
-							Internal2DCAData swd = new Internal2DCAData(text);
+							Internal2DCAData swd = new Internal2DCAData(text, mRootWin.getX()+30, mRootWin.getY()+30);
 							mPainel.add(swd);
 	                    	swd.toFront();
 							text = mElementaryCA.getInfo();
